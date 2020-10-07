@@ -82,7 +82,7 @@ var DynaMongoDB = /** @class */ (function () {
                     case 1:
                         _b.mongoClient = _c.sent();
                         this.db = this.mongoClient.db(databaseName);
-                        return [4 /*yield*/, this.upgradeCollectionsManager.upgradeCollection('@@dyna-mongo-db--database')];
+                        return [4 /*yield*/, this.upgradeDatabase()];
                     case 2:
                         _c.sent();
                         return [2 /*return*/, this.db];
@@ -238,6 +238,13 @@ var DynaMongoDB = /** @class */ (function () {
     };
     DynaMongoDB.prototype.getCollectionVersion = function (collectionName) {
         return this.upgradeCollectionsManager.getCollectionVersion(collectionName);
+    };
+    // Upgrade methods
+    DynaMongoDB.prototype.upgradeDatabase = function () {
+        return this.upgradeCollectionsManager.upgradeCollection('@@dyna-mongo-db--database');
+    };
+    DynaMongoDB.prototype.upgradeCollection = function (collectionName) {
+        return this.upgradeCollectionsManager.upgradeCollection(collectionName);
     };
     // Document tools
     DynaMongoDB.prototype.findFirst = function (_a) {

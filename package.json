@@ -35,7 +35,13 @@
     "release": "yarn test && yarn run build && node dyna/updateChangeId.js && git add -u && git add -A && git commit -m \"Build\" && yarn version --patch && yarn run publish-push",
     "upgrade-release": "yarn upgrade && yarn run release"
   },
-  "keywords": ["mongodb", "migration", "mongo-db", "database", "migration scripts"],
+  "keywords": [
+    "mongodb",
+    "migration",
+    "mongo-db",
+    "database",
+    "migration scripts"
+  ],
   "author": "Anel dev",
   "license": "MIT",
   "dependencies": {
@@ -118,6 +124,6 @@
     "output": "./coverage/junit.xml"
   },
   "dyna": {
-    "changeId": "1g67c1hh-1e1c53a3-37836789706747120"
+    "changeId": "1g1b8045-1ef3h4e9-52115567160847120"
   }
 }

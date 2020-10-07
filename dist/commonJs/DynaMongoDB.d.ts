@@ -1,5 +1,5 @@
 import { Db, ObjectId, Collection, FilterQuery, SortOptionObject } from "mongodb";
-import { ICollectionsUpgrades } from "./UpgradeCollectionsManager";
+import { ICollectionsUpgrades, IUpgradeCollectionResults } from "./UpgradeCollectionsManager";
 export interface IDynaMongoDBConfig {
     connectionString: string;
     databaseName: string;
@@ -33,6 +33,8 @@ export declare class DynaMongoDB {
     getCollection<TSchema>(collectionName: string): Promise<Collection<TSchema>>;
     dropCollection(collectionName: string): Promise<boolean>;
     getCollectionVersion(collectionName: string): Promise<number>;
+    upgradeDatabase(): Promise<IUpgradeCollectionResults>;
+    upgradeCollection(collectionName: string): Promise<IUpgradeCollectionResults>;
     findFirst<TSchema = any>({ collectionName, filter, sort, }: {
         collectionName: string;
         filter?: FilterQuery<TSchema>;
