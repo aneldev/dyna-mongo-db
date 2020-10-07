@@ -173,35 +173,6 @@ const db = await dmdb.getDb();
 const collection = await db.collection('my-collection').find({id: 3}).sort({name: 1}).toArray();
 ```
 
-## Upgrade methods
-
-> You don’t need to use these upgrade methods except if you want to upgrade the database or collection on Application’s deploy time.
-
-### upgradeDatabase(): Promise<IUpgradeCollectionResults>
-
-It runs the needed Upgrade Methods to Upgrade the database
-
-### upgradeCollection(collectionName: string): Promise<IUpgradeCollectionResults>
-
-It runs the needed Upgrade Methods to Upgrade the collection and the dynamic collections of this `collectionName`
-
-### Upgrade methods error handling
-
-If an error occurs, the Promised methods will be fulfilled with rejection of the error.
-
-### Return interface or the upgrade methods
-
-On success Upgrade, the following object is resolved.
-```
-interface IUpgradeCollectionResults {
-  initialVersion: number | null;
-  upgradeToVersion: number | null;
-  hasUpgrades: boolean | null;
-  plannedUpgrades: number;
-  appliedUpgrades: number;
-}
-```
-
 # Tests setup of this repo
 
 Create the file `tests/setup/testConnectionInfo.ts`. There is a sample of it `tests/setup/testConnectionInfo.ts`.

@@ -1,6 +1,6 @@
 # Dyna Mongo DB - Upgrade Mechanism
 
-## Full version of the DynaMongoDb config
+# Full version of the DynaMongoDb config
 
 ```
 interface IDynaMongoDBConfig {
@@ -18,9 +18,9 @@ interface IDynaMongoDBConfig {
 
 > You can use both Database and Collection Upgrades.
 
-## Upgrade database
+# Upgrade database
 
-### Setup
+## Setup
 
 To make a database upgradable you have to pass the `upgradeDatabase` on `DynaMongoDB` instantiation.
 
@@ -80,13 +80,13 @@ const upgradeDatabase: IDatabaseUpgrade[] = [
 
 > NOTE: Do not use the instance of DynaMongoDB (like dmdb) inside the Upgrade Methods!
 
-### Lifecycle
+## Lifecycle
 
 The Upgrade methods are running on Database's connect.
 
-## Upgrade Collection
+# Upgrade Collection
 
-### Setup
+## Setup
 
 Like the databases, you can Upgrade collections in exactly the same way. You just have to create a dictionary object using the Collection name as key.
 
@@ -137,7 +137,7 @@ const collectionUpgrades: ICollectionsUpgrades = {
 >
 > NOTE: Do not use the instance of DynaMongoDB (like dmdb) inside the Upgrade Methods!
 
-### Usage 
+## Usage 
 
 Then you can use the `users` collection without even creating it.
 
@@ -154,7 +154,7 @@ const usersCollection = await dmdb.getCollection('super-company---users');
 usersCollection.insertOne({id: 1, fname: 'John', lname: 'Smith', loginName: 'jsmith'});
 ```
 
-### Lifecycle
+## Lifecycle
 
 The Upgrade operation for a collection is taking part on the first use of the Collection after DB's connection.
 
@@ -164,7 +164,7 @@ If an Upgrade version fails, it will be retried on the next Collection's usage.
 
 If you add on runtime Upgrade methods (for development or testing) you should re-connect to DB. 
 
-## Upgrade Dynamic Connections (the three dashes `---`)
+# Upgrade Dynamic Connections (the three dashes `---`)
 
 Dynamic Collection is a Collection with a name that ends with `---<name>`.
 
@@ -184,6 +184,47 @@ This is normal. The same happens for any kind of error, network error, disk erro
 The error would be something temporary or... permanent. _Deal with it._
 
 To catch the Upgrade Fails use the `onUpgradeError` callback.
+
+# Upgrade methods
+
+You don’t need to use these upgrade methods except if you want to upgrade the database or collections on Application’s upgrade time.
+
+## upgradeDatabase(): Promise<IUpgradeCollectionResults>
+
+It runs the needed Upgrade Methods to Upgrade the database
+
+## upgradeCollection(collectionName: string): Promise<IUpgradeCollectionResults>
+
+It runs the needed Upgrade Methods to Upgrade the collection and the dynamic collections of this `collectionName`
+
+## Upgrade methods error handling
+
+If an error occurs, the Promised methods will be fulfilled with rejection of the error.
+
+## Return interface or the upgrade methods
+
+On success Upgrade, the following object is resolved.
+```
+interface IUpgradeCollectionResults {
+  initialVersion: number | null;
+  upgradeToVersion: number | null;
+  hasUpgrades: boolean | null;
+  plannedUpgrades: number;
+  appliedUpgrades: number;
+}
+```
+
+# Test/Debug upgrade methods
+
+You can use the upgrade methods to see if the methods are compatible with a production db (with a copy of production db of course).
+
+If you want to change the Upgrade version of the database, you can change it on `dyna-mongo-db--upgrade-manager` collection.
+
+For the Database Upgrade version, the collection name is `@@dyna-mongo-db--database`.
+
+There is a debug method to change the version number programmatically: 
+
+`_debug_changeVersion(collectionName: string, version: number): Promise<void>`
 
 # Technical info
 
