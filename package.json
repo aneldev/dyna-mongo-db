@@ -1,6 +1,6 @@
 {
   "name": "dyna-mongo-db",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The dyna-mongo-db, upgrade database, collection and dynamic collections",
   "repository": {
     "type": "git",
@@ -62,8 +62,8 @@
     "babel-loader": "^8.0.4",
     "chokidar": "^3.4.0",
     "circular-dependency-plugin": "^4.0.0",
-    "dyna-interfaces": "^5.0.1",
     "dyna-guid": "^1.0.10",
+    "dyna-interfaces": "^5.0.1",
     "dyna-node-console": "^1.0.7",
     "dyna-node-fs": "^1.0.4",
     "enzyme": "^3.7.0",
