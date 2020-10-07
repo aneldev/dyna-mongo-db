@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Upgrade Collections Upgrade Dynamic with Upgrade manager First Upgrade 1`] = `
+Object {
+  "appliedUpgrades": 3,
+  "hasUpgrades": true,
+  "initialVersion": null,
+  "plannedUpgrades": 3,
+  "upgradeToVersion": 20,
+}
+`;
+
+exports[`Upgrade Collections Upgrade Dynamic with Upgrade manager Should not upgrade again 1`] = `
+Object {
+  "appliedUpgrades": 0,
+  "hasUpgrades": true,
+  "initialVersion": 20,
+  "plannedUpgrades": 0,
+  "upgradeToVersion": null,
+}
+`;
+
+exports[`Upgrade Collections Upgrade Dynamic with Upgrade manager Should not upgrade one more only 1`] = `
+Object {
+  "appliedUpgrades": 1,
+  "hasUpgrades": true,
+  "initialVersion": 20,
+  "plannedUpgrades": 1,
+  "upgradeToVersion": 30,
+}
+`;

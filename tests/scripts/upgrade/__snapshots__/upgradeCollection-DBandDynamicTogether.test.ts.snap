@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Upgrade DB & Dynamic Collections Create dynamic collection Add dynamically DB upgrade script execute it and check 1`] = `
+Array [
+  Object {
+    "code": 1,
+    "info": "DB info doc 1",
+  },
+  Object {
+    "code": 2,
+    "info": "DB info doc 2",
+  },
+]
+`;
