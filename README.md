@@ -149,7 +149,7 @@ find<TSchema>(args: {
   filter?: FilterQuery<TSchema>;
   sort?: SortOptionObject<TSchema>;
   limit?: number;
-}): Promise<TSchema | null> {
+}): Promise<TSchema[] | null> {
 ```
 
 Returns an array of documents or an empty array.
