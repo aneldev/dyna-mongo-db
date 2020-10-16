@@ -282,6 +282,30 @@ var DynaMongoDB = /** @class */ (function () {
             });
         });
     };
+    DynaMongoDB.prototype.explain = function (_a) {
+        var _b, _c, _d, _e, _f;
+        var collectionName = _a.collectionName, _g = _a.filter, filter = _g === void 0 ? {} : _g, _h = _a.sort, sort = _h === void 0 ? {} : _h, limit = _a.limit;
+        return __awaiter(this, void 0, void 0, function () {
+            var collection, mongoExplain;
+            return __generator(this, function (_j) {
+                switch (_j.label) {
+                    case 0: return [4 /*yield*/, this.getCollection(collectionName)];
+                    case 1:
+                        collection = _j.sent();
+                        return [4 /*yield*/, (limit === undefined
+                                ? collection.find(filter).sort(sort).explain()
+                                : collection.find(filter).sort(sort).limit(limit).explain())];
+                    case 2:
+                        mongoExplain = _j.sent();
+                        return [2 /*return*/, {
+                                mongoDBExplain: mongoExplain,
+                                usedIndex: (_c = (_b = mongoExplain === null || mongoExplain === void 0 ? void 0 : mongoExplain.queryPlanner) === null || _b === void 0 ? void 0 : _b.winningPlan) === null || _c === void 0 ? void 0 : _c.inputStage,
+                                usedIndexName: (_f = (_e = (_d = mongoExplain === null || mongoExplain === void 0 ? void 0 : mongoExplain.queryPlanner) === null || _d === void 0 ? void 0 : _d.winningPlan) === null || _e === void 0 ? void 0 : _e.inputStage) === null || _f === void 0 ? void 0 : _f.indexName,
+                            }];
+                }
+            });
+        });
+    };
     DynaMongoDB.prototype._debug_changeVersion = function (collectionName, version) {
         return this.upgradeCollectionsManager._debug_changeVersion(collectionName, version);
     };
