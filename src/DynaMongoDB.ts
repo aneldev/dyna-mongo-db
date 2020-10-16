@@ -1,4 +1,4 @@
-import {Db, MongoClient, ObjectId, Collection, FilterQuery, SortOptionObject} from "mongodb";
+import {Db, MongoClient, ObjectId, Collection, FilterQuery, SortOptionObject, CursorResult} from "mongodb";
 import {UpgradeCollectionsManager, ICollectionsUpgrades, IUpgradeCollectionResults} from "./UpgradeCollectionsManager";
 
 export interface IDynaMongoDBConfig {
@@ -14,6 +14,12 @@ export interface IDatabaseUpgrade {
   title: string;
   description?: string;
   method: (params: { db: Db }) => Promise<void>;
+}
+
+export interface IDynaMongoDBExplain {
+  mongoDBExplain: CursorResult;
+  usedIndex?: string;
+  usedIndexName?: string;
 }
 
 export class DynaMongoDB {
@@ -191,8 +197,35 @@ export class DynaMongoDB {
       : collection.find<TSchema>(filter).sort(sort).limit(limit).toArray();
   }
 
+  public async explain<TSchema = any>(
+    {
+      collectionName,
+      filter = {},
+      sort = {},
+      limit,
+    }
+      : {
+      collectionName: string;
+      filter?: FilterQuery<TSchema>;
+      sort?: SortOptionObject<TSchema>; // MongoDB does not guarantee the order of query results, you should order them
+      limit?: number;
+    },
+  ): Promise<IDynaMongoDBExplain> {
+    const collection = await this.getCollection<TSchema>(collectionName);
+    const mongoExplain: any = await (
+      limit === undefined
+        ? collection.find<TSchema>(filter).sort(sort).explain()
+        : collection.find<TSchema>(filter).sort(sort).limit(limit).explain()
+    );
+
+    return {
+      mongoDBExplain: mongoExplain,
+      usedIndex: mongoExplain?.queryPlanner?.winningPlan?.inputStage,
+      usedIndexName: mongoExplain?.queryPlanner?.winningPlan?.inputStage?.indexName,
+    };
+  }
+
   public _debug_changeVersion(collectionName: string, version: number): Promise<void> {
     return this.upgradeCollectionsManager._debug_changeVersion(collectionName, version);
   }
-
 }

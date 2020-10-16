@@ -1,4 +1,4 @@
-import { Db, ObjectId, Collection, FilterQuery, SortOptionObject } from "mongodb";
+import { Db, ObjectId, Collection, FilterQuery, SortOptionObject, CursorResult } from "mongodb";
 import { ICollectionsUpgrades, IUpgradeCollectionResults } from "./UpgradeCollectionsManager";
 export interface IDynaMongoDBConfig {
     connectionString: string;
@@ -14,6 +14,11 @@ export interface IDatabaseUpgrade {
     method: (params: {
         db: Db;
     }) => Promise<void>;
+}
+export interface IDynaMongoDBExplain {
+    mongoDBExplain: CursorResult;
+    usedIndex?: string;
+    usedIndexName?: string;
 }
 export declare class DynaMongoDB {
     private readonly config;
@@ -46,5 +51,11 @@ export declare class DynaMongoDB {
         sort?: SortOptionObject<TSchema>;
         limit?: number;
     }): Promise<TSchema[]>;
+    explain<TSchema = any>({ collectionName, filter, sort, limit, }: {
+        collectionName: string;
+        filter?: FilterQuery<TSchema>;
+        sort?: SortOptionObject<TSchema>;
+        limit?: number;
+    }): Promise<IDynaMongoDBExplain>;
     _debug_changeVersion(collectionName: string, version: number): Promise<void>;
 }

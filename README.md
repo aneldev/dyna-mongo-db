@@ -173,6 +173,29 @@ const db = await dmdb.getDb();
 const collection = await db.collection('my-collection').find({id: 3}).sort({name: 1}).toArray();
 ```
 
+### explain()
+
+Has the same parameters as the `find` but return an `explain` object.
+
+```
+find<TSchema>(args: {
+  collectionName: string;
+  filter?: FilterQuery<TSchema>;
+  sort?: SortOptionObject<TSchema>;
+  limit?: number;
+}): Promise<IDynaMongoDBExplain> {
+```
+
+Return this explanation object.
+
+```
+interface IDynaMongoDBExplain {
+  mongoDBExplain: CursorResult;     // The mongoDb explain object
+  usedIndex?: string;               // The used index for this find
+  usedIndexName?: string;           // The used index name for this find
+}
+```
+
 # Tests setup of this repo
 
 Create the file `tests/setup/testConnectionInfo.ts`. There is a sample of it `tests/setup/testConnectionInfo.ts`.
