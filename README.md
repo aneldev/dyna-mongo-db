@@ -196,6 +196,24 @@ interface IDynaMongoDBExplain {
 }
 ```
 
+## Upgrade methods
+
+## addCollectionsUpgrades(collectionsUpgrades: ICollectionsUpgrades): void
+
+Add Collections Upgrades dynamically. This method offers to add collections (or update) after the initialization of the DynaMongoDB.
+
+## upgradeDatabase(): Promise<IUpgradeCollectionResults>
+
+Upgrade the database. This executes the upgrades of the `upgradeDatabase` config property.
+
+_You don't need to call this, this is called automatically on first use of db. You may need this if you want to know if the upgrades are success before you use the db._
+
+## upgradeCollection(collectionName: string): Promise<IUpgradeCollectionResults>
+
+Upgrade a collection. This executes the upgrades of this specific collection.
+
+_You don't need to call this, this is called automatically on first use of this collection. You may need this if you want to know if the upgrades are success before you use this collection._
+
 # Tests setup of this repo
 
 Create the file `tests/setup/testConnectionInfo.ts`. There is a sample of it `tests/setup/testConnectionInfo.ts`.

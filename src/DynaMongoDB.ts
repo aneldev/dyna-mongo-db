@@ -146,6 +146,10 @@ export class DynaMongoDB {
 
   // Upgrade methods
 
+  public addCollectionsUpgrades(collectionsUpgrades: ICollectionsUpgrades): void {
+    this.upgradeCollectionsManager.addCollectionsUpgrades(collectionsUpgrades);
+  }
+
   public upgradeDatabase(): Promise<IUpgradeCollectionResults> {
     return this.upgradeCollectionsManager.upgradeCollection('@@dyna-mongo-db--database');
   }

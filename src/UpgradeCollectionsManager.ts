@@ -45,6 +45,13 @@ export class UpgradeCollectionsManager {
   constructor(private readonly config: IUpgradeCollectionsManagerConfig) {
   }
 
+  public addCollectionsUpgrades(collectionsUpgrades: ICollectionsUpgrades): void {
+    this.config.upgradeCollections = {
+      ...this.config.upgradeCollections,
+      ...collectionsUpgrades,
+    };
+  }
+
   public async upgradeCollection(collectionName: string): Promise<IUpgradeCollectionResults> {
     const queue = new DynaJobQueue();
     let ok = true;
