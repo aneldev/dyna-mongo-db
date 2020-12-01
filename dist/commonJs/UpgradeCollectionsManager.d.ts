@@ -31,6 +31,7 @@ export declare class UpgradeCollectionsManager {
     private readonly config;
     private readonly dmdb;
     constructor(config: IUpgradeCollectionsManagerConfig);
+    addCollectionsUpgrades(collectionsUpgrades: ICollectionsUpgrades): void;
     upgradeCollection(collectionName: string): Promise<IUpgradeCollectionResults>;
     private checkAndUpgradeCollection;
     getCollectionVersion(collectionName: string): Promise<number>;

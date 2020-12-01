@@ -38,6 +38,7 @@ export declare class DynaMongoDB {
     getCollection<TSchema>(collectionName: string): Promise<Collection<TSchema>>;
     dropCollection(collectionName: string): Promise<boolean>;
     getCollectionVersion(collectionName: string): Promise<number>;
+    addCollectionsUpgrades(collectionsUpgrades: ICollectionsUpgrades): void;
     upgradeDatabase(): Promise<IUpgradeCollectionResults>;
     upgradeCollection(collectionName: string): Promise<IUpgradeCollectionResults>;
     findFirst<TSchema = any>({ collectionName, filter, sort, }: {

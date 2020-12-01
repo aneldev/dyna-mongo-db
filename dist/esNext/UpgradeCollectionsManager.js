@@ -1,3 +1,14 @@
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -41,6 +52,9 @@ var UpgradeCollectionsManager = /** @class */ (function () {
         this.config = config;
         this.dmdb = this.config.dmdb;
     }
+    UpgradeCollectionsManager.prototype.addCollectionsUpgrades = function (collectionsUpgrades) {
+        this.config.upgradeCollections = __assign(__assign({}, this.config.upgradeCollections), collectionsUpgrades);
+    };
     UpgradeCollectionsManager.prototype.upgradeCollection = function (collectionName) {
         return __awaiter(this, void 0, void 0, function () {
             var queue, ok, error, output, asCollectionName, collectionVersion, upgradeCollection;

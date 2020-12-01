@@ -237,6 +237,9 @@ var DynaMongoDB = /** @class */ (function () {
         return this.upgradeCollectionsManager.getCollectionVersion(collectionName);
     };
     // Upgrade methods
+    DynaMongoDB.prototype.addCollectionsUpgrades = function (collectionsUpgrades) {
+        this.upgradeCollectionsManager.addCollectionsUpgrades(collectionsUpgrades);
+    };
     DynaMongoDB.prototype.upgradeDatabase = function () {
         return this.upgradeCollectionsManager.upgradeCollection('@@dyna-mongo-db--database');
     };
