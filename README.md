@@ -272,3 +272,5 @@ collection.insertOne({info:'My 1st doc'}).then(()=>console.info('done')).catch(c
 ```
 
 Similarly, you can do everything with collections working with real code!
+
+![Similar Node Debugger screenshot](assets/node-debugger-screenshot.png)
