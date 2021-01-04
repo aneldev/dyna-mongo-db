@@ -14,7 +14,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeId = void 0;
 exports.removeId = function (data) {
     var data_ = __assign({}, data);
-    delete data_.id;
+    delete data_._id;
     return data_;
 };
 //# sourceMappingURL=removeId.js.map

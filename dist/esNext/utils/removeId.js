@@ -11,7 +11,7 @@ var __assign = (this && this.__assign) || function () {
 };
 export var removeId = function (data) {
     var data_ = __assign({}, data);
-    delete data_.id;
+    delete data_._id;
     return data_;
 };
 //# sourceMappingURL=removeId.js.map
