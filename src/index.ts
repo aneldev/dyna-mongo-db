@@ -16,5 +16,9 @@ export {
 } from "./utils/saveLoadDoc";
 
 export {
+  removeId,
+} from "./utils/removeId";
+
+export {
   $setData,
 } from "./utils/$setData";

@@ -238,6 +238,13 @@ It converts a data object with the `_id: ObjectId` property replacing it with `i
 Example:
 `const counters = loadDoc(await counters.findOne({widgetId}));`
 
+### removeId = <TData, >(data: TData): Omit<TData, "id"> 
+
+It removes the `_id` from the retrieved data from the database. This is useful when the data for the app doesn't use the `id` at all.
+
+Example:
+`const counters = removeId(await counters.findOne({widgetId}));`
+
 ## $setData
 
 It creates the value for the `$set` by an object.
