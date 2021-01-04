@@ -114,7 +114,12 @@ export class UpgradeCollectionsManager {
       console.log(`DynaMongoDB:  SUCCESS upgrade for collection "${collectionName}" to version ${upgrade.version}`);
     } catch (error) {
       console.error(`DynaMongoDB:  FAILED upgrade for collection "${collectionName}" to version ${upgrade.version}`, error);
-      if (this.config.onUpgradeError) this.config.onUpgradeError(collectionName, upgrade.version, error);
+      if (this.config.onUpgradeError) {
+        this.config.onUpgradeError(collectionName, upgrade.version, error);
+      }
+      else {
+        console.error(`dyna-mongo-db upgrade collection error: collection ${collectionName} on version: ${upgrade.version}`, error);
+      }
       throw error;
     }
   }
