@@ -1,5 +1,6 @@
 import {DynaMongoDB} from "./index";
 import {Collection, Db} from "mongodb";
+import {dynaError, IDynaError} from "dyna-error";
 import {DynaJobQueue} from "dyna-job-queue";
 import {IError} from "dyna-interfaces";
 
@@ -53,9 +54,6 @@ export class UpgradeCollectionsManager {
   }
 
   public async upgradeCollection(collectionName: string): Promise<IUpgradeCollectionResults> {
-    const queue = new DynaJobQueue();
-    let ok = true;
-    let error: IError;
     const output: IUpgradeCollectionResults = {
       initialVersion: null,
       upgradeToVersion: null,
@@ -75,7 +73,11 @@ export class UpgradeCollectionsManager {
     output.hasUpgrades = !!upgradeCollection;
     if (!upgradeCollection) return output;
 
-    return new Promise<IUpgradeCollectionResults>((resolve: (output: IUpgradeCollectionResults) => void, reject: (error: IError) => void): void => {
+    return new Promise<IUpgradeCollectionResults>((resolve: (output: IUpgradeCollectionResults) => void, reject: (error: IDynaError) => void): void => {
+      const queue = new DynaJobQueue();
+      let ok = true;
+      let error: IDynaError;
+
       const collectionMissingVersions =
         upgradeCollection.upgrades
           .sort((a, b) => a.version - b.version)
@@ -178,10 +180,10 @@ export class UpgradeCollectionsManager {
         },
       );
     if (updateResult.upsertedCount === 0 && updateResult.modifiedCount === 0) {
-      throw {
+      throw dynaError({
         message: `Cannot update version info collection for collection [${collectionName}] v${toVersion}`,
         data: {collectionName, updateResult},
-      };
+      });
     }
   }
 

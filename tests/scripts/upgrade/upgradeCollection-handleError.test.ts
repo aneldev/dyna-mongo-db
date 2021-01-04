@@ -1,4 +1,5 @@
 import "jest";
+import {dynaError} from "dyna-error";
 import {DynaMongoDB} from "../../../src";
 import {ICollectionsUpgrades} from "../../../src/UpgradeCollectionsManager";
 import {testConnectionInfo} from "../../setup/testConnectionInfo";
@@ -21,7 +22,7 @@ const collectionUpgrades: ICollectionsUpgrades = {
         version: 20,
         title: 'Add the first doc',
         method: async ({db, collectionName}) => {
-          if (willFail) throw {message: 'Test error'};
+          if (willFail) throw dynaError({message: 'Test error'});
           const collection = await db.collection<any>(collectionName);
           await collection.insertOne({code: 1, info: 'My 1st doc'});
         },
