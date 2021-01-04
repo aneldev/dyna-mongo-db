@@ -214,6 +214,49 @@ Upgrade a collection. This executes the upgrades of this specific collection.
 
 _You don't need to call this, this is called automatically on first use of this collection. You may need this if you want to know if the upgrades are success before you use this collection._
 
+# Utils
+
+This package comes with a small amount of _optional_ utils.
+
+## Save Load Docs (with id)
+
+Mongo DB has for all documents the `_id: ObjectId` property. We can use this `_id: ObjectId` as `id: string` using the these functions:
+
+`import {saveDoc, loadDoc} from "dyna-mongo-db"`
+
+### saveDoc = <TData, >(item: TData): any
+
+It converts a data object with the `id: string` property replacing it with `_id: ObjectId` with the same id value.
+
+Example:
+`const counters = await counters.updateOne(saveDoc(counter));`
+
+### loadDoc = <TData, >(item: TData): TData
+
+It converts a data object with the `_id: ObjectId` property replacing it with `id: string` with the same id value.
+
+Example:
+`const counters = loadDoc(await counters.findOne({widgetId}));`
+
+## $setData
+
+It creates the value for the `$set` by an object.
+
+Example:
+```
+await users.updateMany(
+  {
+    userId,
+  },
+  {
+    $set: {
+      updatedAt: now,
+      ...$setData('phones', phones),
+    },
+  },
+);
+
+```
 # Tests setup of this repo
 
 Create the file `tests/setup/testConnectionInfo.ts`. There is a sample of it `tests/setup/testConnectionInfo.ts`.

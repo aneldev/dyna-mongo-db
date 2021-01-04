@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`save/load doc converter methods loadDoc 1`] = `
+Object {
+  "age": 32,
+  "id": "5fe8b3a73f7b78b5488f2bed",
+  "name": "Lola",
+}
+`;
+
+exports[`save/load doc converter methods saveDoc with empty id 1`] = `
+Object {
+  "age": 32,
+  "name": "Lola",
+}
+`;
+
+exports[`save/load doc converter methods saveDoc with id 1`] = `
+Object {
+  "_id": "5fe8b3a73f7b78b5488f2bed",
+  "age": 32,
+  "name": "Lola",
+}
+`;
+
+exports[`save/load doc converter methods saveDoc without id 1`] = `
+Object {
+  "age": 32,
+  "name": "Lola",
+}
+`;

@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`$setData Data with array 1`] = `
+Object {
+  "user.cars": Array [
+    Object {
+      "brand": "Volvo",
+      "modal": 2920,
+    },
+    Object {
+      "brand": "Saab",
+      "modal": 2027,
+    },
+  ],
+  "user.cars[0]": Object {
+    "brand": "Volvo",
+    "modal": 2920,
+  },
+  "user.cars[0].brand": "Volvo",
+  "user.cars[0].modal": 2920,
+  "user.cars[1]": Object {
+    "brand": "Saab",
+    "modal": 2027,
+  },
+  "user.cars[1].brand": "Saab",
+  "user.cars[1].modal": 2027,
+  "user.name": "John",
+}
+`;
+
+exports[`$setData Plain object 1`] = `
+Object {
+  "user.name": "John",
+  "user.phones": Object {
+    "main": "+44000011112222",
+  },
+  "user.phones.main": "+44000011112222",
+}
+`;
