@@ -1,4 +1,4 @@
-import {$setData} from "./$setData";
+import {$setData} from "../../../src/utils/$setData";
 
 describe('$setData', () => {
   test('Plain object', () => {

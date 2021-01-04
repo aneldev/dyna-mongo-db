@@ -49,7 +49,6 @@ describe('Add collection upgrades', () => {
   });
   afterAll(done => {
     (async () => {
-      // await new Promise(r => setTimeout(r, 100));
       await dmdb.disconnect();
       done();
     })();
