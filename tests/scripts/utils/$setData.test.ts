@@ -12,6 +12,30 @@ describe('$setData', () => {
     )
       .toMatchSnapshot();
   });
+  test('Plain object, overwrite object', () => {
+    expect(
+      $setData({
+        name: 'John',
+        phones: {
+          main: '+44000011112222',
+          __overwrite: true,
+        },
+      }, 'user'),
+    )
+      .toMatchSnapshot();
+  });
+  test('Plain object, root, overwrite object', () => {
+    expect(
+      $setData({
+        name: 'John',
+        phones: {
+          main: '+44000011112222',
+        },
+        __overwrite: true,
+      }, 'user'),
+    )
+      .toMatchSnapshot();
+  });
   test('Root property', () => {
     expect(
       $setData({
@@ -48,6 +72,35 @@ describe('$setData', () => {
           {brand: 'Honda', modal: 2019},
         ],
       }, 'user'),
+    )
+      .toMatchSnapshot();
+  });
+  test('Data with array, overwrite', () => {
+    expect(
+      $setData({
+        name: 'John',
+        cars: [
+          {brand: 'Volvo', modal: 2920},
+          {brand: 'Saab', modal: 2017},
+          null,
+          undefined,
+          {brand: 'Honda', modal: 2019},
+          "__overwrite",
+        ],
+      }, 'user'),
+    )
+      .toMatchSnapshot();
+  });
+  test('Data with array, root, overwrite', () => {
+    expect(
+      $setData([
+        {brand: 'Volvo', modal: 2920},
+        {brand: 'Saab', modal: 2017},
+        null,
+        undefined,
+        {brand: 'Honda', modal: 2019},
+        "__overwrite",
+      ]),
     )
       .toMatchSnapshot();
   });

@@ -3430,10 +3430,10 @@ dyna-node-fs@^1.0.4:
   dependencies:
     dyna-interfaces "^4.0.0"
 
-dyna-object-scan@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/dyna-object-scan/-/dyna-object-scan-1.0.2.tgz#2e7f6e7d0446fbe36fd356a1925ee872ed0c61cc"
-  integrity sha512-ktwdb+iyr8sYdvJja9S8ONCpWYx2CUBU8LyahCXJgufnIDDgW25XmYh+Cx+7Dwa9MK7RTue/cDjaglnfNU7ioA==
+dyna-object-scan@^2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/dyna-object-scan/-/dyna-object-scan-2.0.1.tgz#e9d1601a85b593ed4311f4803200310c66493fdd"
+  integrity sha512-hKE+MitU/Vx/xn12+cmF4UojTqxirjvOpyPur1jZolZCll2SkyztdrplfMtf+KY3gudnLQQqkvq4gczpZ/HR1A==
 
 ecc-jsbn@~0.1.1:
   version "0.1.2"

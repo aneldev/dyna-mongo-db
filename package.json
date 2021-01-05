@@ -52,7 +52,7 @@
   "dependencies": {
     "dyna-error": "^1.1.1",
     "dyna-job-queue": "^5.1.3",
-    "dyna-object-scan": "^1.0.2",
+    "dyna-object-scan": "^2.0.0",
     "mongodb": "^3.6.2"
   },
   "devDependencies": {

@@ -13,6 +13,47 @@ Object {
 }
 `;
 
+exports[`$setData Data with array, overwrite 1`] = `
+Object {
+  "user.cars": Array [
+    Object {
+      "brand": "Volvo",
+      "modal": 2920,
+    },
+    Object {
+      "brand": "Saab",
+      "modal": 2017,
+    },
+    null,
+    undefined,
+    Object {
+      "brand": "Honda",
+      "modal": 2019,
+    },
+  ],
+  "user.name": "John",
+}
+`;
+
+exports[`$setData Data with array, root, overwrite 1`] = `
+Array [
+  Object {
+    "brand": "Volvo",
+    "modal": 2920,
+  },
+  Object {
+    "brand": "Saab",
+    "modal": 2017,
+  },
+  null,
+  undefined,
+  Object {
+    "brand": "Honda",
+    "modal": 2019,
+  },
+]
+`;
+
 exports[`$setData Null and undefined values 1`] = `
 Object {
   "user.firstName": "John",
@@ -25,6 +66,26 @@ exports[`$setData Plain object 1`] = `
 Object {
   "user.name": "John",
   "user.phones.main": "+44000011112222",
+}
+`;
+
+exports[`$setData Plain object, overwrite object 1`] = `
+Object {
+  "user.name": "John",
+  "user.phones": Object {
+    "main": "+44000011112222",
+  },
+}
+`;
+
+exports[`$setData Plain object, root, overwrite object 1`] = `
+Object {
+  "user": Object {
+    "name": "John",
+    "phones": Object {
+      "main": "+44000011112222",
+    },
+  },
 }
 `;
 
