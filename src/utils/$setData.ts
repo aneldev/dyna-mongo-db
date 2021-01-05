@@ -1,6 +1,7 @@
 import {dynaObjectScan} from "dyna-object-scan";
+import {UpdateQuery} from "mongodb";
 
-export const $setData = (data: any, propertyName?: string): { [p: string]: any } => {
+export const $setData = <TSchema = any, >(data: TSchema, propertyName?: string): UpdateQuery<TSchema> | Partial<TSchema> => {
   const output = {};
   dynaObjectScan(data, ({path, value}) => {
     if (value === undefined) return;
