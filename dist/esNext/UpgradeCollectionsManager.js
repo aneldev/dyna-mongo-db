@@ -45,6 +45,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+import { dynaError } from "dyna-error";
 import { DynaJobQueue } from "dyna-job-queue";
 var COLLECTION_VERSIONS_COLLECTION_NAME = 'dyna-mongo-db--upgrade-manager';
 var UpgradeCollectionsManager = /** @class */ (function () {
@@ -57,13 +58,11 @@ var UpgradeCollectionsManager = /** @class */ (function () {
     };
     UpgradeCollectionsManager.prototype.upgradeCollection = function (collectionName) {
         return __awaiter(this, void 0, void 0, function () {
-            var queue, ok, error, output, asCollectionName, collectionVersion, upgradeCollection;
+            var output, asCollectionName, collectionVersion, upgradeCollection;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        queue = new DynaJobQueue();
-                        ok = true;
                         output = {
                             initialVersion: null,
                             upgradeToVersion: null,
@@ -83,6 +82,9 @@ var UpgradeCollectionsManager = /** @class */ (function () {
                         if (!upgradeCollection)
                             return [2 /*return*/, output];
                         return [2 /*return*/, new Promise(function (resolve, reject) {
+                                var queue = new DynaJobQueue();
+                                var ok = true;
+                                var error;
                                 var collectionMissingVersions = upgradeCollection.upgrades
                                     .sort(function (a, b) { return a.version - b.version; })
                                     .filter(function (upgradeCollection) { return upgradeCollection.version > collectionVersion; });
@@ -154,8 +156,12 @@ var UpgradeCollectionsManager = /** @class */ (function () {
                     case 5:
                         error_1 = _a.sent();
                         console.error("DynaMongoDB:  FAILED upgrade for collection \"" + collectionName + "\" to version " + upgrade.version, error_1);
-                        if (this.config.onUpgradeError)
+                        if (this.config.onUpgradeError) {
                             this.config.onUpgradeError(collectionName, upgrade.version, error_1);
+                        }
+                        else {
+                            console.error("dyna-mongo-db upgrade collection error: collection " + collectionName + " on version: " + upgrade.version, error_1);
+                        }
                         throw error_1;
                     case 6: return [2 /*return*/];
                 }
@@ -238,10 +244,10 @@ var UpgradeCollectionsManager = /** @class */ (function () {
                     case 2:
                         updateResult = _a.sent();
                         if (updateResult.upsertedCount === 0 && updateResult.modifiedCount === 0) {
-                            throw {
+                            throw dynaError({
                                 message: "Cannot update version info collection for collection [" + collectionName + "] v" + toVersion,
                                 data: { collectionName: collectionName, updateResult: updateResult },
-                            };
+                            });
                         }
                         return [2 /*return*/];
                 }

@@ -1,3 +1,3 @@
-export declare const $setData: (propertyName: string, data: any) => {
-    [fullPathProperty: string]: any;
+export declare const $setData: (data: any, propertyName?: string | undefined) => {
+    [p: string]: any;
 };

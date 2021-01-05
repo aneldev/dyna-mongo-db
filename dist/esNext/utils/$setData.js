@@ -1,9 +1,14 @@
 import { dynaObjectScan } from "dyna-object-scan";
-export var $setData = function (propertyName, data) {
+export var $setData = function (data, propertyName) {
     var output = {};
     dynaObjectScan(data, function (_a) {
         var path = _a.path, value = _a.value;
-        return output[propertyName + path] = value;
+        if (value === undefined)
+            return;
+        var applyPropertyName = propertyName
+            ? propertyName + path
+            : (path || '').substr(1);
+        output[applyPropertyName] = value;
     });
     return output;
 };
