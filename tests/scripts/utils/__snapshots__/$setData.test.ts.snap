@@ -2,28 +2,13 @@
 
 exports[`$setData Data with array 1`] = `
 Object {
-  "user.cars": Array [
-    Object {
-      "brand": "Volvo",
-      "modal": 2920,
-    },
-    Object {
-      "brand": "Saab",
-      "modal": 2027,
-    },
-  ],
-  "user.cars[0]": Object {
-    "brand": "Volvo",
-    "modal": 2920,
-  },
-  "user.cars[0].brand": "Volvo",
-  "user.cars[0].modal": 2920,
-  "user.cars[1]": Object {
-    "brand": "Saab",
-    "modal": 2027,
-  },
-  "user.cars[1].brand": "Saab",
-  "user.cars[1].modal": 2027,
+  "user.cars.0.brand": "Volvo",
+  "user.cars.0.modal": 2920,
+  "user.cars.1.brand": "Saab",
+  "user.cars.1.modal": 2017,
+  "user.cars.2": null,
+  "user.cars.4.brand": "Honda",
+  "user.cars.4.modal": 2019,
   "user.name": "John",
 }
 `;
@@ -32,9 +17,6 @@ exports[`$setData Null and undefined values 1`] = `
 Object {
   "user.firstName": "John",
   "user.middleName": null,
-  "user.phones": Object {
-    "main": "+44000011112222",
-  },
   "user.phones.main": "+44000011112222",
 }
 `;
@@ -42,9 +24,6 @@ Object {
 exports[`$setData Plain object 1`] = `
 Object {
   "user.name": "John",
-  "user.phones": Object {
-    "main": "+44000011112222",
-  },
   "user.phones.main": "+44000011112222",
 }
 `;
@@ -52,9 +31,6 @@ Object {
 exports[`$setData Root property 1`] = `
 Object {
   "name": "John",
-  "phones": Object {
-    "main": "+44000011112222",
-  },
   "phones.main": "+44000011112222",
 }
 `;

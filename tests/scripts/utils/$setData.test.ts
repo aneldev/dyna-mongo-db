@@ -42,7 +42,10 @@ describe('$setData', () => {
         name: 'John',
         cars: [
           {brand: 'Volvo', modal: 2920},
-          {brand: 'Saab', modal: 2027},
+          {brand: 'Saab', modal: 2017},
+          null,
+          undefined,
+          {brand: 'Honda', modal: 2019},
         ],
       }, 'user'),
     )
