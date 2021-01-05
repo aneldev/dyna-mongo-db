@@ -48,3 +48,13 @@ Object {
   "user.phones.main": "+44000011112222",
 }
 `;
+
+exports[`$setData Root property 1`] = `
+Object {
+  "name": "John",
+  "phones": Object {
+    "main": "+44000011112222",
+  },
+  "phones.main": "+44000011112222",
+}
+`;

@@ -2,7 +2,6 @@ import {DynaMongoDB} from "./index";
 import {Collection, Db} from "mongodb";
 import {dynaError, IDynaError} from "dyna-error";
 import {DynaJobQueue} from "dyna-job-queue";
-import {IError} from "dyna-interfaces";
 
 export interface IUpgradeCollectionsManagerConfig {
   dmdb: DynaMongoDB;
