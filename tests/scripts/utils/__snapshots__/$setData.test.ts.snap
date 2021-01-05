@@ -28,6 +28,17 @@ Object {
 }
 `;
 
+exports[`$setData Null and undefined values 1`] = `
+Object {
+  "user.firstName": "John",
+  "user.middleName": null,
+  "user.phones": Object {
+    "main": "+44000011112222",
+  },
+  "user.phones.main": "+44000011112222",
+}
+`;
+
 exports[`$setData Plain object 1`] = `
 Object {
   "user.name": "John",
