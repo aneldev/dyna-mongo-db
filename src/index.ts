@@ -22,3 +22,7 @@ export {
 export {
   $setData,
 } from "./utils/$setData";
+
+export {
+  findLikeSearchEngine,
+} from "./utils/findLikeSearchEngine";

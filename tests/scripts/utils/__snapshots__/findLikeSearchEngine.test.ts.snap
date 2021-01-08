@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`findLikeSearchEngine Search a sentence 1`] = `
+Object {
+  "$and": Array [
+    Object {
+      "searchContent": Object {
+        "$options": "i",
+        "$regex": ".*Hello.*",
+      },
+    },
+    Object {
+      "searchContent": Object {
+        "$options": "i",
+        "$regex": ".*World.*",
+      },
+    },
+  ],
+}
+`;
+
+exports[`findLikeSearchEngine Search a sentence excluding words 1`] = `
+Object {
+  "$and": Array [
+    Object {
+      "searchContent": Object {
+        "$options": "i",
+        "$regex": ".*Hello.*",
+      },
+    },
+    Object {
+      "searchContent": Object {
+        "$options": "i",
+        "$regex": ".*World.*",
+      },
+    },
+    Object {
+      "searchContent": Object {
+        "$not": Object {
+          "$options": "i",
+          "$regex": ".*Japan.*",
+        },
+      },
+    },
+    Object {
+      "searchContent": Object {
+        "$not": Object {
+          "$options": "i",
+          "$regex": ".*.*",
+        },
+      },
+    },
+    Object {
+      "searchContent": Object {
+        "$options": "i",
+        "$regex": ".*Holland.*",
+      },
+    },
+  ],
+}
+`;
+
+exports[`findLikeSearchEngine Search a word 1`] = `
+Object {
+  "$and": Array [
+    Object {
+      "searchContent": Object {
+        "$options": "i",
+        "$regex": ".*Hello.*",
+      },
+    },
+  ],
+}
+`;
