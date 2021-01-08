@@ -13,10 +13,11 @@ import { dynaObjectScan } from "dyna-object-scan";
 export var $setData = function (data, propertyName) {
     var output = {};
     dynaObjectScan(data, function (_a) {
-        var path = _a.path, value = _a.value, parent = _a.parent, skip = _a.skip;
+        var path = _a.path, scanPropertyName = _a.propertyName, value = _a.value, parent = _a.parent, skip = _a.skip;
         var isUndefined = value === undefined;
         if (isUndefined)
             return;
+        var isMongoDBProperty = (scanPropertyName || '')[0] === '$';
         var isRoot = parent === undefined;
         var isNull = value === null;
         var isArray = Array.isArray(value);
@@ -44,6 +45,10 @@ export var $setData = function (data, propertyName) {
                 output[applyPropertyName] = value;
             }
         };
+        if (isMongoDBProperty) {
+            setValue(value);
+            return;
+        }
         if (isNull) {
             setValue(value);
             return;
