@@ -16,11 +16,15 @@ var dyna_object_scan_1 = require("dyna-object-scan");
 exports.$setData = function (data, propertyName) {
     var output = {};
     dyna_object_scan_1.dynaObjectScan(data, function (_a) {
-        var path = _a.path, scanPropertyName = _a.propertyName, value = _a.value, parent = _a.parent, skip = _a.skip;
+        var path = _a.path, value = _a.value, parent = _a.parent, skip = _a.skip;
         var isUndefined = value === undefined;
         if (isUndefined)
             return;
-        var isMongoDBProperty = (scanPropertyName || '')[0] === '$';
+        var valueHasMongodbProperties = typeof value === "object" &&
+            value !== null &&
+            Object.keys(value).length &&
+            Object.keys(value)
+                .reduce(function (acc, key) { return acc && key[0] === '$'; }, true);
         var isRoot = parent === undefined;
         var isNull = value === null;
         var isArray = Array.isArray(value);
@@ -48,8 +52,9 @@ exports.$setData = function (data, propertyName) {
                 output[applyPropertyName] = value;
             }
         };
-        if (isMongoDBProperty) {
+        if (valueHasMongodbProperties) {
             setValue(value);
+            skip();
             return;
         }
         if (isNull) {
