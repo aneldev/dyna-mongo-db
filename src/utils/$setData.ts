@@ -3,10 +3,11 @@ import {UpdateQuery} from "mongodb";
 
 export const $setData = <TSchema = any, >(data: TSchema, propertyName?: string): UpdateQuery<TSchema> | Partial<TSchema> => {
   let output = {};
-  dynaObjectScan(data, ({path, value, parent, skip}) => {
+  dynaObjectScan(data, ({path, propertyName: scanPropertyName, value, parent, skip}) => {
     const isUndefined = value === undefined;
     if (isUndefined) return;
 
+    const isMongoDBProperty = (scanPropertyName || '')[0] === '$';
     const isRoot = parent === undefined;
     const isNull = value === null;
     const isArray = Array.isArray(value);
@@ -39,6 +40,11 @@ export const $setData = <TSchema = any, >(data: TSchema, propertyName?: string):
         output[applyPropertyName] = value;
       }
     };
+
+    if (isMongoDBProperty) {
+      setValue(value);
+      return;
+    }
 
     if (isNull) {
       setValue(value);

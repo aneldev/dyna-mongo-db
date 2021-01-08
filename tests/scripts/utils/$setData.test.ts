@@ -104,4 +104,16 @@ describe('$setData', () => {
     )
       .toMatchSnapshot();
   });
+  test('Data with mongoDb $concat', () => {
+    expect(
+      $setData({
+        cars: [
+          {brand: 'Volvo', modal: 2920},
+          {brand: 'Saab', modal: 2017},
+          {brand: 'Honda', modal: 2019, searchContent: {$concat: ["$brand", " ", "$model"]}},
+        ]
+      }),
+    )
+      .toMatchSnapshot();
+  });
 });
