@@ -62,14 +62,13 @@ Object {
   "cars.1.modal": 2017,
   "cars.2.brand": "Honda",
   "cars.2.modal": 2019,
-  "cars.2.searchContent.$concat": Array [
-    "$brand",
-    " ",
-    "$model",
-  ],
-  "cars.2.searchContent.$concat.0": "$brand",
-  "cars.2.searchContent.$concat.1": " ",
-  "cars.2.searchContent.$concat.2": "$model",
+  "cars.2.searchContent": Object {
+    "$concat": Array [
+      "$brand",
+      " ",
+      "$model",
+    ],
+  },
 }
 `;
 
