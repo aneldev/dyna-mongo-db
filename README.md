@@ -258,7 +258,7 @@ await users.updateMany(
   {
     $set: {
       updatedAt: now,
-      ...$setData('phones', phones),
+      ...$setData(phones, 'phones'),
     },
   },
 );
