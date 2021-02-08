@@ -9,7 +9,7 @@ console.info('Dev emv started');
   databaseName: testConnectionInfo.databaseName,
 });
 
-console.debug('Time to play with your global.dmdb', (global as any).dmdb);
+console.log('Time to play with your global.dmdb', (global as any).dmdb);
 
 // new Promise(r => r); // Do not terminate the instance
 
