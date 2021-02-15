@@ -12,16 +12,16 @@ Dyna Mongo DB offers a database Upgrade (aka migration) mechanism, with versions
 
 Additionally, Dyna Mongo DB offers the same upgrade mechanism per Collection. Collections can have their Upgrades. This way, you don't need to upgrade the database but only the Collections.
 
-Read the [Upgrade mechanism](README.Upgrade.md) for more.  
+Read the [Upgrade mechanism](README.Upgrade.md) for more.
 
 # Dynamic Collections
 
-We can also have dynamic collections with Upgrades. Imagine the Collection `users` that has its own Upgrades Methods. 
+We can also have dynamic collections with Upgrades. Imagine the Collection `users` that has its own Upgrades Methods.
 If you create a Collection with the name `tesla---users`, then the Dyna Mongo DB will create this Collection and run the Upgrade Methods of the `users` Collection.
 
 The magic happened because the `---` (three dashes) indicate the dynamic collections.
 
-This way, the `tesla---users` Collection has the same features as the `users` Collection. 
+This way, the `tesla---users` Collection has the same features as the `users` Collection.
 
 Now you can create different `users` collections per project/customer/organization or any other entity in the same database making the Collections super fast and maintainable.
 
@@ -238,7 +238,7 @@ It converts a data object with the `_id: ObjectId` property replacing it with `i
 Example:
 `const counters = loadDoc(await counters.findOne({widgetId}));`
 
-### removeId = <TData, >(data: TData): Omit<TData, "id"> 
+### removeId = <TData, >(data: TData): Omit<TData, "id">
 
 It removes the `_id` from the retrieved data from the database. This is useful when the data for the app doesn't use the `id` at all.
 
@@ -249,7 +249,18 @@ Example:
 
 It creates the value for the `$set` by an object.
 
-Example:
+`$setData` goes through all nested objects and arrays and create a flatted object the keys ready as mongo db expects to update a document.
+
+Undefined values are removed from the update. Null values remain.
+
+### Signature
+
+`$setData = <TSchema = any, >(data: TSchema, propertyName?: string): UpdateQuery<TSchema> | Partial<TSchema>`
+
+If the `propertyName` is given, then returns an object with only that property.
+Otherwise, it returns an object with all properties needed to update the document.
+
+Example to change only the `phones` property:
 ```
 await users.updateMany(
   {
@@ -264,6 +275,63 @@ await users.updateMany(
 );
 
 ```
+Example to change only the `user` document:
+```
+await users.updateMany(
+  {
+    userId,
+  },
+  {
+    $set: $setData(updatedUser),
+  },
+);
+
+```
+
+By default, the `$setData` updates only the non-undefined properties.
+That means that it doesn't overwrite a nested object or array.
+
+To overwrite a nested object, add the `__overwrite: boolean` on the object, like this:
+
+```
+await users.updateMany(
+  {
+    userId,
+  },
+  {
+    Sset: $setData({
+      salary: {
+        netto: 3200,
+        currency: 'eur',
+        __overwrite: true,
+      },
+    }),
+  },
+);
+
+```
+
+Or for an array something like this:
+
+```
+await users.updateMany(
+  {
+    userId,
+  },
+  {
+    Sset: $setData({
+      cars: [
+        'Honday',
+        'Plymouth',
+        '__overwrite',
+      ],
+    }),
+  },
+);
+
+```
+
+
 # Tests setup of this repo
 
 Create the file `tests/setup/testConnectionInfo.ts`. There is a sample of it `tests/setup/testConnectionInfo.ts`.
@@ -280,13 +348,13 @@ This playground is useful because what you will write to test is the actual code
 
 The responses (the promised one) are precisely what your code will get.
 
-So for development, it is faster to work with this playground instead of MongoDb's shell. 
+So for development, it is faster to work with this playground instead of MongoDb's shell.
 
 ## Setup
 
 Create the file `tests/setup/testConnectionInfo.ts`. There is a sample of it `tests/setup/testConnectionInfo.ts` and assign there the connection string of a demo database. It is safe to use it on production dbs also.
 
-## Start it 
+## Start it
 
 - clone this repo
 - `yarn`
