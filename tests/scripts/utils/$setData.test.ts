@@ -5,9 +5,7 @@ describe('$setData', () => {
     expect(
       $setData({
         name: 'John',
-        phones: {
-          main: '+44000011112222',
-        },
+        phones: {main: '+44000011112222'},
       }, 'user'),
     )
       .toMatchSnapshot();
@@ -28,9 +26,7 @@ describe('$setData', () => {
     expect(
       $setData({
         name: 'John',
-        phones: {
-          main: '+44000011112222',
-        },
+        phones: {main: '+44000011112222'},
         __overwrite: true,
       }, 'user'),
     )
@@ -40,9 +36,7 @@ describe('$setData', () => {
     expect(
       $setData({
         name: 'John',
-        phones: {
-          main: '+44000011112222',
-        },
+        phones: {main: '+44000011112222'},
       }),
     )
       .toMatchSnapshot();
@@ -53,9 +47,7 @@ describe('$setData', () => {
         firstName: 'John',
         middleName: null,
         lastName: undefined,
-        phones: {
-          main: '+44000011112222',
-        },
+        phones: {main: '+44000011112222'},
       }, 'user'),
     )
       .toMatchSnapshot();
@@ -65,11 +57,20 @@ describe('$setData', () => {
       $setData({
         name: 'John',
         cars: [
-          {brand: 'Volvo', modal: 2920},
-          {brand: 'Saab', modal: 2017},
+          {
+            brand: 'Volvo',
+            modal: 2920,
+          },
+          {
+            brand: 'Saab',
+            modal: 2017,
+          },
           null,
           undefined,
-          {brand: 'Honda', modal: 2019},
+          {
+            brand: 'Honda',
+            modal: 2019,
+          },
         ],
       }, 'user'),
     )
@@ -80,11 +81,20 @@ describe('$setData', () => {
       $setData({
         name: 'John',
         cars: [
-          {brand: 'Volvo', modal: 2920},
-          {brand: 'Saab', modal: 2017},
+          {
+            brand: 'Volvo',
+            modal: 2920,
+          },
+          {
+            brand: 'Saab',
+            modal: 2017,
+          },
           null,
           undefined,
-          {brand: 'Honda', modal: 2019},
+          {
+            brand: 'Honda',
+            modal: 2019,
+          },
           "__overwrite",
         ],
       }, 'user'),
@@ -94,11 +104,20 @@ describe('$setData', () => {
   test('Data with array, root, overwrite', () => {
     expect(
       $setData([
-        {brand: 'Volvo', modal: 2920},
-        {brand: 'Saab', modal: 2017},
+        {
+          brand: 'Volvo',
+          modal: 2920,
+        },
+        {
+          brand: 'Saab',
+          modal: 2017,
+        },
         null,
         undefined,
-        {brand: 'Honda', modal: 2019},
+        {
+          brand: 'Honda',
+          modal: 2019,
+        },
         "__overwrite",
       ]),
     )
@@ -108,10 +127,20 @@ describe('$setData', () => {
     expect(
       $setData({
         cars: [
-          {brand: 'Volvo', modal: 2920},
-          {brand: 'Saab', modal: 2017},
-          {brand: 'Honda', modal: 2019, searchContent: {$concat: ["$brand", " ", "$model"]}},
-        ]
+          {
+            brand: 'Volvo',
+            modal: 2920,
+          },
+          {
+            brand: 'Saab',
+            modal: 2017,
+          },
+          {
+            brand: 'Honda',
+            modal: 2019,
+            searchContent: {$concat: ["$brand", " ", "$model"]},
+          },
+        ],
       }),
     )
       .toMatchSnapshot();

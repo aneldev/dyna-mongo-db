@@ -1,6 +1,12 @@
 import {DynaMongoDB} from "./index";
-import {Collection, Db} from "mongodb";
-import {dynaError, IDynaError} from "dyna-error";
+import {
+  Collection,
+  Db,
+} from "mongodb";
+import {
+  dynaError,
+  IDynaError,
+} from "dyna-error";
 import {DynaJobQueue} from "dyna-job-queue";
 
 export interface IUpgradeCollectionsManagerConfig {
@@ -21,7 +27,7 @@ export interface ICollectionUpgrade {
   version: number;
   title: string;
   description?: string;
-  method: (params: { db: Db, collectionName: string }) => Promise<void>;
+  method: (params: { db: Db; collectionName: string }) => Promise<void>;
 }
 
 interface IDBCollectionVersionInfo {
@@ -90,7 +96,8 @@ export class UpgradeCollectionsManager {
           try {
             await this.checkAndUpgradeCollection(collectionName, upgrade);
             output.appliedUpgrades++;
-          } catch (e) {
+          }
+          catch (e) {
             ok = false;
             error = e;
           }
@@ -113,7 +120,8 @@ export class UpgradeCollectionsManager {
       });
       await this.bumpConnectionCurrentVersion(collectionName, upgrade.version);
       console.log(`DynaMongoDB:  SUCCESS upgrade for collection "${collectionName}" to version ${upgrade.version}`);
-    } catch (error) {
+    }
+    catch (error) {
       console.error(`DynaMongoDB:  FAILED upgrade for collection "${collectionName}" to version ${upgrade.version}`, error);
       if (this.config.onUpgradeError) {
         this.config.onUpgradeError(collectionName, upgrade.version, error);
@@ -143,16 +151,14 @@ export class UpgradeCollectionsManager {
     const collectionExists = await this.dmdb.collectionExists(COLLECTION_VERSIONS_COLLECTION_NAME);
 
     if (collectionExists) {
-      // load
+      // Load
       versionsCollectionsCollection = await db.collection<IDBCollectionVersionInfo>(COLLECTION_VERSIONS_COLLECTION_NAME);
     }
     else {
-      // create
+      // Create
       versionsCollectionsCollection = await db.createCollection<IDBCollectionVersionInfo>(COLLECTION_VERSIONS_COLLECTION_NAME);
       await versionsCollectionsCollection.createIndex(
-        {
-          collectionName: 1,
-        },
+        {collectionName: 1},
         {
           name: 'Collection name index',
           unique: true,
@@ -166,22 +172,17 @@ export class UpgradeCollectionsManager {
     const versionsCollectionsCollection = await this.getVersionsCollectionCollection();
     const updateResult = await versionsCollectionsCollection
       .updateOne(
-        {
-          collectionName: collectionName,
-        } as IDBCollectionVersionInfo,
-        {
-          $set: {
-            version: toVersion,
-          },
-        },
-        {
-          upsert: true,
-        },
+        {collectionName: collectionName} as IDBCollectionVersionInfo,
+        {$set: {version: toVersion}},
+        {upsert: true},
       );
     if (updateResult.upsertedCount === 0 && updateResult.modifiedCount === 0) {
       throw dynaError({
         message: `Cannot update version info collection for collection [${collectionName}] v${toVersion}`,
-        data: {collectionName, updateResult},
+        data: {
+          collectionName,
+          updateResult,
+        },
       });
     }
   }
@@ -190,21 +191,15 @@ export class UpgradeCollectionsManager {
     const versionsCollectionsCollection = await this.getVersionsCollectionCollection();
     await versionsCollectionsCollection
       .deleteOne(
-        {
-          collectionName: collectionName,
-        } as IDBCollectionVersionInfo,
+        {collectionName: collectionName} as IDBCollectionVersionInfo,
       );
   }
 
   public async _debug_changeVersion(collectionName: string, version: number): Promise<void> {
     const versionsCollection = await this.getVersionsCollectionCollection();
     await versionsCollection.updateOne(
-      {
-        collectionName,
-      },
-      {
-        $set: {version},
-      },
+      {collectionName},
+      {$set: {version}},
     );
   }
 }

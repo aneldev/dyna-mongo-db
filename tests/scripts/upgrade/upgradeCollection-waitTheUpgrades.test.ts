@@ -13,18 +13,25 @@ const collectionUpgrades: ICollectionsUpgrades = {
       {
         version: 10,
         title: 'Creation of the collection',
-        method: async ({collectionName, db}) => {
+        method: async ({
+          collectionName, db,
+        }) => {
           await db.createCollection(collectionName);
         },
       },
       {
         version: 12,
         title: 'Create the unique index',
-        method: async ({db, collectionName}) => {
+        method: async ({
+          db, collectionName,
+        }) => {
           const collection = await db.collection<any>(collectionName);
           await collection.createIndex(
             {email: 1},
-            {unique: true, name: 'index-email-unique'},
+            {
+              unique: true,
+              name: 'index-email-unique',
+            },
           );
           await new Promise(r => setTimeout(r, 3000));
         },
@@ -59,7 +66,7 @@ describe('Upgrade Collections', () => {
     done();
   });
 
-  test('Await to Upgrade Collections and then use it ', done => {
+  test('Await to Upgrade Collections and then use it', done => {
     (async () => {
       const collection = await dmdb.getCollection<IUser>(TEST_COLLECTION_NAME);
 
@@ -78,7 +85,8 @@ describe('Upgrade Collections', () => {
           email: 'j.smith@example.com',
         });
         fail('Should not insert duplicated emails');
-      } catch (e) {
+      }
+      catch (e) {
         expect(e).not.toBe(undefined);
       }
 

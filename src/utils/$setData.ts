@@ -1,9 +1,16 @@
 import {dynaObjectScan} from "dyna-object-scan";
-import {UpdateQuery} from "mongodb";
+import {SetFields} from "mongodb";
 
-export const $setData = <TSchema = any, >(data: TSchema, propertyName?: string): UpdateQuery<TSchema> | Partial<TSchema> => {
+export const $setData = <TSchema = any, >(data: TSchema, propertyName?: string): SetFields<TSchema> | Partial<TSchema> => {
   let output = {};
-  dynaObjectScan(data, ({path, value, parent, skip}) => {
+  dynaObjectScan(data, (
+    {
+      path,
+      value,
+      parent,
+      skip,
+    },
+  ) => {
     const isUndefined = value === undefined;
     if (isUndefined) return;
 

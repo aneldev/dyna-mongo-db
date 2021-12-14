@@ -1,4 +1,7 @@
-import {loadDoc, saveDoc} from "../../../src";
+import {
+  loadDoc,
+  saveDoc,
+} from "../../../src";
 import {ObjectId} from "mongodb";
 
 describe("save/load doc converter methods", () => {

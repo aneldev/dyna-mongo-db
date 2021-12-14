@@ -14,25 +14,37 @@ const collectionUpgrades: ICollectionsUpgrades = {
       {
         version: 10,
         title: 'Creation of the collection',
-        method: async ({collectionName, db}) => {
+        method: async ({
+          collectionName, db,
+        }) => {
           await db.createCollection(collectionName);
         },
       },
       {
         version: 20,
         title: 'Add the first doc',
-        method: async ({db, collectionName}) => {
+        method: async ({
+          db, collectionName,
+        }) => {
           if (willFail) throw dynaError({message: 'Test error'});
           const collection = await db.collection<any>(collectionName);
-          await collection.insertOne({code: 1, info: 'My 1st doc'});
+          await collection.insertOne({
+            code: 1,
+            info: 'My 1st doc',
+          });
         },
       },
       {
         version: 30,
         title: 'Add the second doc',
-        method: async ({db, collectionName}) => {
+        method: async ({
+          db, collectionName,
+        }) => {
           const collection = await db.collection<any>(collectionName);
-          await collection.insertOne({code: 2, info: 'My 2nd doc'});
+          await collection.insertOne({
+            code: 2,
+            info: 'My 2nd doc',
+          });
         },
       },
     ],
@@ -48,7 +60,11 @@ describe('Upgrade Collections', () => {
       connectionString: testConnectionInfo.connectionString,
       databaseName: testConnectionInfo.databaseName,
       upgradeCollections: collectionUpgrades,
-      onUpgradeError: (collectionName, version, error) => errors.push({collectionName, version, error}),
+      onUpgradeError: (collectionName, version, error) => errors.push({
+        collectionName,
+        version,
+        error,
+      }),
     });
     dmdb
       .connect()
@@ -63,7 +79,7 @@ describe('Upgrade Collections', () => {
   });
 
   describe('Create Collection', () => {
-    it('Test collection should not exist ', done => {
+    it('Test collection should not exist', done => {
       (async () => {
         const exists = await dmdb.collectionExists(TEST_COLLECTION_NAME);
         expect(exists).toBe(false);
@@ -71,7 +87,7 @@ describe('Upgrade Collections', () => {
       })();
     });
 
-    it('It should fail trying to findFirst', done => {
+    it('should fail trying to findFirst', done => {
       (async () => {
         try {
           await dmdb.findFirst<any>({
@@ -79,18 +95,20 @@ describe('Upgrade Collections', () => {
             filter: {code: 2},
           });
           fail({message: 'The findFirst should not succeed!'});
-        } catch (e) {
+        }
+        catch (e) {
           expect(e.message).toBe('Test error');
           expect(errors).toMatchSnapshot();
           const collectionVersion = await dmdb.getCollectionVersion(TEST_COLLECTION_NAME);
           expect(collectionVersion).toBe(10);
-        } finally {
+        }
+        finally {
           done();
         }
       })();
     });
 
-    it('It should fail again trying to findFirst', done => {
+    it('should fail again trying to findFirst', done => {
       (async () => {
         try {
           await dmdb.findFirst<any>({
@@ -98,12 +116,14 @@ describe('Upgrade Collections', () => {
             filter: {code: 2},
           });
           fail({message: 'The findFirst should not succeed!'});
-        } catch (e) {
+        }
+        catch (e) {
           expect(e.message).toBe('Test error');
           expect(errors).toMatchSnapshot();
           const collectionVersion = await dmdb.getCollectionVersion(TEST_COLLECTION_NAME);
           expect(collectionVersion).toBe(10);
-        } finally {
+        }
+        finally {
           done();
         }
       })();
@@ -121,25 +141,29 @@ describe('Upgrade Collections', () => {
           expect(doc.code).toBe(2);
           const collectionVersion = await dmdb.getCollectionVersion(TEST_COLLECTION_NAME);
           expect(collectionVersion).toBe(30);
-        } catch (e) {
+        }
+        catch (e) {
           fail({message: 'The findFirst should not fail'});
           console.error(e);
-        } finally {
+        }
+        finally {
           done();
         }
       })();
     });
 
-    it('should clean up the test things ', done => {
+    it('should clean up the test things', done => {
       (async () => {
         try {
           await dmdb.dropCollection(TEST_COLLECTION_NAME);
-        } catch (e) {
+        }
+        catch (e) {
           fail({
             message: 'Test cleanup failed',
             error: e,
           });
-        } finally {
+        }
+        finally {
           console.log('Test finished');
           done();
         }

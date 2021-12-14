@@ -1,5 +1,8 @@
 import "jest";
-import {DynaMongoDB, IDatabaseUpgrade} from "../../../src";
+import {
+  DynaMongoDB,
+  IDatabaseUpgrade,
+} from "../../../src";
 import {ICollectionsUpgrades} from "../../../src/UpgradeCollectionsManager";
 import {testConnectionInfo} from "../../setup/testConnectionInfo";
 import {removeMongoDbIds} from "../../utils/removeMongoDbIds";
@@ -23,7 +26,10 @@ const upgradeDatabase: IDatabaseUpgrade[] = [
     title: 'Add the first doc',
     method: async ({db}) => {
       const collection = db.collection<any>(DB_INFO_COLLECTION_NAME);
-      await collection.insertOne({code: 1, info: 'DB info doc 1'});
+      await collection.insertOne({
+        code: 1,
+        info: 'DB info doc 1',
+      });
     },
   },
 ];
@@ -34,24 +40,36 @@ const upgradeCollections: ICollectionsUpgrades = {
       {
         version: 10,
         title: 'Creation of the collection',
-        method: async ({collectionName, db}) => {
+        method: async ({
+          collectionName, db,
+        }) => {
           await db.createCollection(collectionName);
         },
       },
       {
         version: 12,
         title: 'Add the first doc',
-        method: async ({db, collectionName}) => {
+        method: async ({
+          db, collectionName,
+        }) => {
           const collection = db.collection<any>(collectionName);
-          await collection.insertOne({code: 1, info: 'My 1st doc'});
+          await collection.insertOne({
+            code: 1,
+            info: 'My 1st doc',
+          });
         },
       },
       {
         version: 20,
         title: 'Add the second doc',
-        method: async ({db, collectionName}) => {
+        method: async ({
+          db, collectionName,
+        }) => {
           const collection = db.collection<any>(collectionName);
-          await collection.insertOne({code: 2, info: 'My 2nd doc'});
+          await collection.insertOne({
+            code: 2,
+            info: 'My 2nd doc',
+          });
         },
       },
     ],
@@ -81,7 +99,7 @@ describe('Upgrade DB & Dynamic Collections', () => {
   });
 
   describe('Create dynamic collection', () => {
-    it('Test collection should not exist ', done => {
+    it('Test collection should not exist', done => {
       (async () => {
         const exists = await dmdb.collectionExists(COMPANY_USER_COLLECTION_NAME);
         expect(exists).toBe(false);
@@ -89,7 +107,7 @@ describe('Upgrade DB & Dynamic Collections', () => {
       })();
     });
 
-    it('It should create new collection and fetch the default doc with code 2', done => {
+    it('should create new collection and fetch the default doc with code 2', done => {
       (async () => {
         const doc = await dmdb.findFirst<any>({
           collectionName: COMPANY_USER_COLLECTION_NAME,
@@ -111,13 +129,18 @@ describe('Upgrade DB & Dynamic Collections', () => {
         expect(tryDoc).toBe(null);
 
         upgradeCollections[USERS_COLLECTION_NAME].upgrades.push({
-            version: 22,
-            title: 'Add the second doc',
-            method: async ({db, collectionName}) => {
-              const collection = await db.collection<any>(collectionName);
-              await collection.insertOne({code: 3, info: 'My 3rd doc'});
-            },
+          version: 22,
+          title: 'Add the second doc',
+          method: async ({
+            db, collectionName,
+          }) => {
+            const collection = await db.collection<any>(collectionName);
+            await collection.insertOne({
+              code: 3,
+              info: 'My 3rd doc',
+            });
           },
+        },
         );
 
         // Reconnect to force the new upgrade scripts
@@ -144,13 +167,16 @@ describe('Upgrade DB & Dynamic Collections', () => {
     it('Add dynamically DB upgrade script execute it and check', done => {
       (async () => {
         upgradeDatabase.push({
-            version: 20,
-            title: 'Add the second doc',
-            method: async ({db}) => {
-              const collection = db.collection<any>(DB_INFO_COLLECTION_NAME);
-              await collection.insertOne({code: 2, info: 'DB info doc 2'});
-            },
+          version: 20,
+          title: 'Add the second doc',
+          method: async ({db}) => {
+            const collection = db.collection<any>(DB_INFO_COLLECTION_NAME);
+            await collection.insertOne({
+              code: 2,
+              info: 'DB info doc 2',
+            });
           },
+        },
         );
 
         await dmdb.disconnect();
@@ -169,12 +195,14 @@ describe('Upgrade DB & Dynamic Collections', () => {
           await dmdb.dropCollection(DB_INFO_COLLECTION_NAME);
           await dmdb.dropCollection(COMPANY_USER_COLLECTION_NAME);
           await dmdb._debug_changeVersion('@@dyna-mongo-db--database', -1);
-        } catch (e) {
+        }
+        catch (e) {
           fail({
             message: 'Test cleanup failed',
             error: e,
           });
-        } finally {
+        }
+        finally {
           console.log('Test finished');
           done();
         }
