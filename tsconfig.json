@@ -17,7 +17,9 @@
     "target": "es5",
     "sourceMap": true,
     "jsx": "react",
-    "rootDirs": ["src"],
+    "rootDirs": [
+      "src"
+    ],
     "baseUrl": "src",
     "allowJs": false,
     "skipLibCheck": true,
@@ -37,7 +39,7 @@
     ]
   },
   "files": [
-    "src/index.ts"
+    "./src/index.ts"
   ],
   "exclude": [
     "node_modules",
