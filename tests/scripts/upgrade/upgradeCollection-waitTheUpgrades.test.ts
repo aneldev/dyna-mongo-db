@@ -1,4 +1,3 @@
-import "jest";
 import {DynaMongoDB} from "../../../src";
 import {ICollectionsUpgrades} from "../../../src/UpgradeCollectionsManager";
 import {testConnectionInfo} from "../../setup/testConnectionInfo";
@@ -53,48 +52,44 @@ describe('Upgrade Collections', () => {
   });
 
   const clearDb = async (): Promise<void> => {
+    const exist = await dmdb.collectionExists(TEST_COLLECTION_NAME);
+    if (!exist) return;
     await dmdb.dropCollection(TEST_COLLECTION_NAME);
   };
 
-  beforeAll(async (done) => {
+  beforeAll(async () => {
     await clearDb();
-    done();
   });
-  afterAll(async (done) => {
+  afterAll(async () => {
     await clearDb();
     await dmdb.disconnect();
-    done();
   });
 
-  test('Await to Upgrade Collections and then use it', done => {
-    (async () => {
-      const collection = await dmdb.getCollection<IUser>(TEST_COLLECTION_NAME);
+  test('Await to Upgrade Collections and then use it', async () => {
+    const collection = await dmdb.getCollection<IUser>(TEST_COLLECTION_NAME);
+    expect.assertions(2);
 
+    await collection.insertOne({
+      name: 'John Smith',
+      email: 'j.smith@example.com',
+    });
+    await collection.insertOne({
+      name: 'Nancy Lorens',
+      email: 'n.lorens@example.com',
+    });
+
+    try {
       await collection.insertOne({
         name: 'John Smith',
         email: 'j.smith@example.com',
       });
-      await collection.insertOne({
-        name: 'Nancy Lorens',
-        email: 'n.lorens@example.com',
-      });
+    }
+    catch (e) {
+      expect(e.message.indexOf('E11000')).toBeGreaterThan(-1);
+    }
 
-      try {
-        await collection.insertOne({
-          name: 'John Smith',
-          email: 'j.smith@example.com',
-        });
-        fail('Should not insert duplicated emails');
-      }
-      catch (e) {
-        expect(e).not.toBe(undefined);
-      }
-
-      const users = await collection.find().toArray();
-      expect(users.length).toBe(2);
-
-      done();
-    })();
+    const users = await collection.find().toArray();
+    expect(users.length).toBe(2);
   });
 
 });

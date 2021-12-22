@@ -1,4 +1,3 @@
-import "jest";
 import {DynaMongoDB} from "../../../src";
 import {ICollectionsUpgrades} from "../../../src/UpgradeCollectionsManager";
 import {testConnectionInfo} from "../../setup/testConnectionInfo";
@@ -49,62 +48,42 @@ const collectionUpgrades: ICollectionsUpgrades = {
 
 describe('Upgrade Collections', () => {
   let dmdb: DynaMongoDB;
-  beforeAll(done => {
+
+  const clearDb = async (): Promise<void> => {
+    const exist = await dmdb.collectionExists(TEST_COLLECTION_NAME);
+    if (!exist) return;
+    await dmdb.dropCollection(TEST_COLLECTION_NAME);
+  };
+
+  beforeAll(async () => {
     dmdb = new DynaMongoDB({
       connectionString: testConnectionInfo.connectionString,
       databaseName: testConnectionInfo.databaseName,
       upgradeCollections: collectionUpgrades,
     });
-    dmdb
-      .connect()
-      .then(() => done());
+    await dmdb.connect();
+    await clearDb();
   });
-  afterAll(done => {
-    (async () => {
-      // Await new Promise(r => setTimeout(r, 100));
-      await dmdb.disconnect();
-      done();
-    })();
+  afterAll(async () => {
+    // Await new Promise(r => setTimeout(r, 100));
+    await clearDb();
+    await dmdb.disconnect();
   });
 
   describe('Create Collection', () => {
-    it('Test collection should not exist', done => {
-      (async () => {
-        const exists = await dmdb.collectionExists(TEST_COLLECTION_NAME);
-        expect(exists).toBe(false);
-        done();
-      })();
+    it('Test collection should not exist', async () => {
+      const exists = await dmdb.collectionExists(TEST_COLLECTION_NAME);
+      expect(exists).toBe(false);
     });
 
-    it('should create new collection and fetch the default doc with code 2', done => {
-      (async () => {
-        const doc = await dmdb.findFirst<any>({
-          collectionName: TEST_COLLECTION_NAME,
-          filter: {code: 2},
-        });
+    it('should create new collection and fetch the default doc with code 2', async () => {
+      const doc = await dmdb.findFirst<any>({
+        collectionName: TEST_COLLECTION_NAME,
+        filter: {code: 2},
+      });
 
-        expect(doc).not.toBe(null);
-        expect(doc.code).toBe(2);
-        done();
-      })();
-    });
-
-    it('should clean up the test things', done => {
-      (async () => {
-        try {
-          await dmdb.dropCollection(TEST_COLLECTION_NAME);
-        }
-        catch (e) {
-          fail({
-            message: 'Test cleanup failed',
-            error: e,
-          });
-        }
-        finally {
-          console.log('Test finished');
-          done();
-        }
-      })();
+      expect(doc).not.toBe(null);
+      expect(doc.code).toBe(2);
     });
 
   });
