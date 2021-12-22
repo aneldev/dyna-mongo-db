@@ -12,9 +12,10 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeId = void 0;
-exports.removeId = function (data) {
+var removeId = function (data) {
     var data_ = __assign({}, data);
     delete data_._id;
     return data_;
 };
+exports.removeId = removeId;
 //# sourceMappingURL=removeId.js.map

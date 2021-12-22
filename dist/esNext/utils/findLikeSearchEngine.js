@@ -9,7 +9,7 @@ export var findLikeSearchEngine = function (fieldName, searchText) {
             var isNot = searchPart[0] === '-';
             var text = isNot ? searchPart.substr(1) : searchPart;
             var comparison = {
-                $regex: ".*" + text + ".*",
+                $regex: ".*".concat(text, ".*"),
                 $options: 'i',
             };
             return isNot ? (_a = {}, _a[fieldName] = { $not: comparison }, _a) : (_b = {}, _b[fieldName] = comparison, _b);

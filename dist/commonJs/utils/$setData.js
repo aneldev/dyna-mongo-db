@@ -13,9 +13,9 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.$setData = void 0;
 var dyna_object_scan_1 = require("dyna-object-scan");
-exports.$setData = function (data, propertyName) {
+var $setData = function (data, propertyName) {
     var output = {};
-    dyna_object_scan_1.dynaObjectScan(data, function (_a) {
+    (0, dyna_object_scan_1.dynaObjectScan)(data, function (_a) {
         var path = _a.path, value = _a.value, parent = _a.parent, skip = _a.skip;
         var isUndefined = value === undefined;
         if (isUndefined)
@@ -83,4 +83,5 @@ exports.$setData = function (data, propertyName) {
     });
     return output;
 };
+exports.$setData = $setData;
 //# sourceMappingURL=$setData.js.map
