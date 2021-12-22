@@ -1,4 +1,4 @@
-export const findLikeSearchEngine = (fieldName: string, searchText?: string): any => {
+export const findLikeSearchEngine = (fieldName: string, searchText?: string) => {
   if (!searchText || !searchText.trim()) return {};
   const searchParts = searchText.split(' ').filter(Boolean);
   return {
@@ -14,5 +14,5 @@ export const findLikeSearchEngine = (fieldName: string, searchText?: string): an
           {[fieldName]: {$not: comparison}}
           : {[fieldName]: comparison};
       }),
-  }
+  };
 };

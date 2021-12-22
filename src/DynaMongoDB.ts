@@ -1,5 +1,20 @@
-import {Db, MongoClient, ObjectId, Collection, FilterQuery, SortOptionObject, CursorResult} from "mongodb";
-import {UpgradeCollectionsManager, ICollectionsUpgrades, IUpgradeCollectionResults} from "./UpgradeCollectionsManager";
+import {
+  Db,
+  MongoClient,
+  ObjectId,
+  Collection,
+  Document,
+  Filter,
+  Sort,
+} from "mongodb";
+
+import {DynaJobQueue} from "dyna-job-queue";
+
+import {
+  UpgradeCollectionsManager,
+  ICollectionsUpgrades,
+  IUpgradeCollectionResults,
+} from "./UpgradeCollectionsManager";
 
 export interface IDynaMongoDBConfig {
   connectionString: string;
@@ -17,7 +32,7 @@ export interface IDatabaseUpgrade {
 }
 
 export interface IDynaMongoDBExplain {
-  mongoDBExplain: CursorResult;
+  mongoDBExplain: Document;
   usedIndex?: string;
   usedIndexName?: string;
 }
@@ -25,16 +40,19 @@ export interface IDynaMongoDBExplain {
 export class DynaMongoDB {
   private db: Db | null = null;
   private mongoClient: MongoClient | null = null;
+
+  private queue = new DynaJobQueue();
+
   private readonly upgradeCollectionsManager: UpgradeCollectionsManager;
   private collectionsCache: { [collectionName: string]: Collection<any> } = {};
 
   constructor(private readonly config: IDynaMongoDBConfig) {
+    this.connect = this.queue.jobFactory(this.connect.bind(this));
+
     this.upgradeCollectionsManager = new UpgradeCollectionsManager({
       dmdb: this,
       upgradeCollections: {
-        '@@dyna-mongo-db--database': {
-          upgrades: this.config.upgradeDatabase || [],
-        },
+        '@@dyna-mongo-db--database': {upgrades: this.config.upgradeDatabase || []},
         ...(this.config.upgradeCollections || {}),
       },
       onUpgradeError: this.config.onUpgradeError,
@@ -49,13 +67,9 @@ export class DynaMongoDB {
       databaseName,
     } = this.config;
 
-    this.mongoClient = await MongoClient.connect(
-      encodeURI(connectionString),
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      },
-    );
+    if (this.db) return this.db;
+
+    this.mongoClient = await MongoClient.connect(encodeURI(connectionString));
 
     this.db = this.mongoClient.db(databaseName);
 
@@ -99,17 +113,8 @@ export class DynaMongoDB {
 
   public async getCollectionNames(): Promise<string[]> {
     const db = await this.getDb();
-    return new Promise((resolve, reject) => {
-      db.listCollections().toArray((err, collections) => {
-        if (err)
-          reject(err);
-        else
-          resolve(
-            collections
-              .map(collectionInfo => collectionInfo.name),
-          );
-      });
-    });
+    const collections = await db.listCollections().toArray();
+    return collections.map(collectionInfo => collectionInfo.name);
   }
 
   public async collectionExists(collectionName: string): Promise<boolean> {
@@ -129,15 +134,14 @@ export class DynaMongoDB {
 
   public async dropCollection(collectionName: string): Promise<boolean> {
     const db = await this.getDb();
+
+    const exists = await this.collectionExists(collectionName);
+    if (!exists) return false;
+
     await this.upgradeCollectionsManager.dropCollection(collectionName);
-    try {
-      await db.dropCollection(collectionName);
-      delete this.collectionsCache[collectionName];
-      return true;
-    } catch (e) {
-      if (e.name = 'MongoError' && e.code === 26 && e.message === 'ns not found') return false;
-      throw e;
-    }
+    await db.dropCollection(collectionName);
+    delete this.collectionsCache[collectionName];
+    return true;
   }
 
   public getCollectionVersion(collectionName: string): Promise<number> {
@@ -165,11 +169,10 @@ export class DynaMongoDB {
       collectionName,
       filter = {},
       sort = {},
-    }
-      : {
+    }: {
       collectionName: string;
-      filter?: FilterQuery<TSchema>;
-      sort?: SortOptionObject<TSchema>; // MongoDB does not guarantee the order of query results, you should order them
+      filter?: Filter<TSchema>;
+      sort?: Sort; // MongoDB does not guarantee the order of query results, you should order them
     },
   ): Promise<TSchema | null> {
     const items = await this.find<TSchema>({
@@ -187,18 +190,22 @@ export class DynaMongoDB {
       filter = {},
       sort = {},
       limit,
-    }
-      : {
+    }: {
       collectionName: string;
-      filter?: FilterQuery<TSchema>;
-      sort?: SortOptionObject<TSchema>; // MongoDB does not guarantee the order of query results, you should order them
+      filter?: Filter<TSchema>;
+      sort?: Sort; // MongoDB does not guarantee the order of query results, you should order them
       limit?: number;
     },
   ): Promise<TSchema[]> {
     const collection = await this.getCollection<TSchema>(collectionName);
     return limit === undefined
-      ? collection.find<TSchema>(filter).sort(sort).toArray()
-      : collection.find<TSchema>(filter).sort(sort).limit(limit).toArray();
+      ? collection
+        .find<TSchema>(filter).sort(sort)
+        .toArray()
+      : collection
+        .find<TSchema>(filter).sort(sort)
+        .limit(limit)
+        .toArray();
   }
 
   public async explain<TSchema = any>(
@@ -207,19 +214,23 @@ export class DynaMongoDB {
       filter = {},
       sort = {},
       limit,
-    }
-      : {
+    }: {
       collectionName: string;
-      filter?: FilterQuery<TSchema>;
-      sort?: SortOptionObject<TSchema>; // MongoDB does not guarantee the order of query results, you should order them
+      filter?: Filter<TSchema>;
+      sort?: Sort; // MongoDB does not guarantee the order of query results, you should order them
       limit?: number;
     },
   ): Promise<IDynaMongoDBExplain> {
     const collection = await this.getCollection<TSchema>(collectionName);
     const mongoExplain: any = await (
       limit === undefined
-        ? collection.find<TSchema>(filter).sort(sort).explain()
-        : collection.find<TSchema>(filter).sort(sort).limit(limit).explain()
+        ? collection
+          .find<TSchema>(filter).sort(sort)
+          .explain()
+        : collection
+          .find<TSchema>(filter).sort(sort)
+          .limit(limit)
+          .explain()
     );
 
     return {

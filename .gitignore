@@ -10,4 +10,5 @@ temp/
 /bash.exe.stackdump
 /update-externals.sh
 /yarn-error.log
+/dist/commonJs/webpack-debug-node.index.d.ts
 tests/setup/testConnectionInfo.ts

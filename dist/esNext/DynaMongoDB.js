@@ -45,21 +45,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { MongoClient, ObjectId } from "mongodb";
-import { UpgradeCollectionsManager } from "./UpgradeCollectionsManager";
+import { MongoClient, ObjectId, } from "mongodb";
+import { DynaJobQueue } from "dyna-job-queue";
+import { UpgradeCollectionsManager, } from "./UpgradeCollectionsManager";
 var DynaMongoDB = /** @class */ (function () {
     function DynaMongoDB(config) {
         this.config = config;
         this.db = null;
         this.mongoClient = null;
+        this.queue = new DynaJobQueue();
         this.collectionsCache = {};
         // General tools
         this.ObjectId = ObjectId;
+        this.connect = this.queue.jobFactory(this.connect.bind(this));
         this.upgradeCollectionsManager = new UpgradeCollectionsManager({
             dmdb: this,
-            upgradeCollections: __assign({ '@@dyna-mongo-db--database': {
-                    upgrades: this.config.upgradeDatabase || [],
-                } }, (this.config.upgradeCollections || {})),
+            upgradeCollections: __assign({ '@@dyna-mongo-db--database': { upgrades: this.config.upgradeDatabase || [] } }, (this.config.upgradeCollections || {})),
             onUpgradeError: this.config.onUpgradeError,
         });
     }
@@ -71,11 +72,10 @@ var DynaMongoDB = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _a = this.config, connectionString = _a.connectionString, databaseName = _a.databaseName;
+                        if (this.db)
+                            return [2 /*return*/, this.db];
                         _b = this;
-                        return [4 /*yield*/, MongoClient.connect(encodeURI(connectionString), {
-                                useNewUrlParser: true,
-                                useUnifiedTopology: true,
-                            })];
+                        return [4 /*yield*/, MongoClient.connect(encodeURI(connectionString))];
                     case 1:
                         _b.mongoClient = _c.sent();
                         this.db = this.mongoClient.db(databaseName);
@@ -151,21 +151,16 @@ var DynaMongoDB = /** @class */ (function () {
     };
     DynaMongoDB.prototype.getCollectionNames = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var db;
+            var db, collections;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.getDb()];
                     case 1:
                         db = _a.sent();
-                        return [2 /*return*/, new Promise(function (resolve, reject) {
-                                db.listCollections().toArray(function (err, collections) {
-                                    if (err)
-                                        reject(err);
-                                    else
-                                        resolve(collections
-                                            .map(function (collectionInfo) { return collectionInfo.name; }));
-                                });
-                            })];
+                        return [4 /*yield*/, db.listCollections().toArray()];
+                    case 2:
+                        collections = _a.sent();
+                        return [2 /*return*/, collections.map(function (collectionInfo) { return collectionInfo.name; })];
                 }
             });
         });
@@ -206,29 +201,25 @@ var DynaMongoDB = /** @class */ (function () {
     };
     DynaMongoDB.prototype.dropCollection = function (collectionName) {
         return __awaiter(this, void 0, void 0, function () {
-            var db, e_1;
+            var db, exists;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.getDb()];
                     case 1:
                         db = _a.sent();
-                        return [4 /*yield*/, this.upgradeCollectionsManager.dropCollection(collectionName)];
+                        return [4 /*yield*/, this.collectionExists(collectionName)];
                     case 2:
-                        _a.sent();
-                        _a.label = 3;
+                        exists = _a.sent();
+                        if (!exists)
+                            return [2 /*return*/, false];
+                        return [4 /*yield*/, this.upgradeCollectionsManager.dropCollection(collectionName)];
                     case 3:
-                        _a.trys.push([3, 5, , 6]);
+                        _a.sent();
                         return [4 /*yield*/, db.dropCollection(collectionName)];
                     case 4:
                         _a.sent();
                         delete this.collectionsCache[collectionName];
                         return [2 /*return*/, true];
-                    case 5:
-                        e_1 = _a.sent();
-                        if (e_1.name = 'MongoError' && e_1.code === 26 && e_1.message === 'ns not found')
-                            return [2 /*return*/, false];
-                        throw e_1;
-                    case 6: return [2 /*return*/];
                 }
             });
         });
@@ -276,8 +267,13 @@ var DynaMongoDB = /** @class */ (function () {
                     case 1:
                         collection = _d.sent();
                         return [2 /*return*/, limit === undefined
-                                ? collection.find(filter).sort(sort).toArray()
-                                : collection.find(filter).sort(sort).limit(limit).toArray()];
+                                ? collection
+                                    .find(filter).sort(sort)
+                                    .toArray()
+                                : collection
+                                    .find(filter).sort(sort)
+                                    .limit(limit)
+                                    .toArray()];
                 }
             });
         });
@@ -293,8 +289,13 @@ var DynaMongoDB = /** @class */ (function () {
                     case 1:
                         collection = _j.sent();
                         return [4 /*yield*/, (limit === undefined
-                                ? collection.find(filter).sort(sort).explain()
-                                : collection.find(filter).sort(sort).limit(limit).explain())];
+                                ? collection
+                                    .find(filter).sort(sort)
+                                    .explain()
+                                : collection
+                                    .find(filter).sort(sort)
+                                    .limit(limit)
+                                    .explain())];
                     case 2:
                         mongoExplain = _j.sent();
                         return [2 /*return*/, {

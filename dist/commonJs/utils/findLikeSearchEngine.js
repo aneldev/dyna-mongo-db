@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findLikeSearchEngine = void 0;
-exports.findLikeSearchEngine = function (fieldName, searchText) {
+var findLikeSearchEngine = function (fieldName, searchText) {
     if (!searchText || !searchText.trim())
         return {};
     var searchParts = searchText.split(' ').filter(Boolean);
@@ -12,11 +12,12 @@ exports.findLikeSearchEngine = function (fieldName, searchText) {
             var isNot = searchPart[0] === '-';
             var text = isNot ? searchPart.substr(1) : searchPart;
             var comparison = {
-                $regex: ".*" + text + ".*",
+                $regex: ".*".concat(text, ".*"),
                 $options: 'i',
             };
             return isNot ? (_a = {}, _a[fieldName] = { $not: comparison }, _a) : (_b = {}, _b[fieldName] = comparison, _b);
         }),
     };
 };
+exports.findLikeSearchEngine = findLikeSearchEngine;
 //# sourceMappingURL=findLikeSearchEngine.js.map

@@ -138,7 +138,7 @@ var UpgradeCollectionsManager = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log("DynaMongoDB: Upgrade collection \"" + collectionName + "\" to version " + upgrade.version + " " + upgrade.title);
+                        console.log("DynaMongoDB: Upgrade collection \"".concat(collectionName, "\" to version ").concat(upgrade.version, " ").concat(upgrade.title));
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 5, , 6]);
@@ -154,16 +154,16 @@ var UpgradeCollectionsManager = /** @class */ (function () {
                         return [4 /*yield*/, this.bumpConnectionCurrentVersion(collectionName, upgrade.version)];
                     case 4:
                         _a.sent();
-                        console.log("DynaMongoDB:  SUCCESS upgrade for collection \"" + collectionName + "\" to version " + upgrade.version);
+                        console.log("DynaMongoDB:  SUCCESS upgrade for collection \"".concat(collectionName, "\" to version ").concat(upgrade.version));
                         return [3 /*break*/, 6];
                     case 5:
                         error_1 = _a.sent();
-                        console.error("DynaMongoDB:  FAILED upgrade for collection \"" + collectionName + "\" to version " + upgrade.version, error_1);
+                        console.error("DynaMongoDB:  FAILED upgrade for collection \"".concat(collectionName, "\" to version ").concat(upgrade.version), error_1);
                         if (this.config.onUpgradeError) {
                             this.config.onUpgradeError(collectionName, upgrade.version, error_1);
                         }
                         else {
-                            console.error("dyna-mongo-db upgrade collection error: collection " + collectionName + " on version: " + upgrade.version, error_1);
+                            console.error("dyna-mongo-db upgrade collection error: collection ".concat(collectionName, " on version: ").concat(upgrade.version), error_1);
                         }
                         throw error_1;
                     case 6: return [2 /*return*/];
@@ -205,16 +205,14 @@ var UpgradeCollectionsManager = /** @class */ (function () {
                         if (!collectionExists) return [3 /*break*/, 4];
                         return [4 /*yield*/, db.collection(COLLECTION_VERSIONS_COLLECTION_NAME)];
                     case 3:
-                        // load
+                        // Load
                         versionsCollectionsCollection = _a.sent();
                         return [3 /*break*/, 7];
                     case 4: return [4 /*yield*/, db.createCollection(COLLECTION_VERSIONS_COLLECTION_NAME)];
                     case 5:
-                        // create
+                        // Create
                         versionsCollectionsCollection = _a.sent();
-                        return [4 /*yield*/, versionsCollectionsCollection.createIndex({
-                                collectionName: 1,
-                            }, {
+                        return [4 /*yield*/, versionsCollectionsCollection.createIndex({ collectionName: 1 }, {
                                 name: 'Collection name index',
                                 unique: true,
                             })];
@@ -235,21 +233,16 @@ var UpgradeCollectionsManager = /** @class */ (function () {
                     case 1:
                         versionsCollectionsCollection = _a.sent();
                         return [4 /*yield*/, versionsCollectionsCollection
-                                .updateOne({
-                                collectionName: collectionName,
-                            }, {
-                                $set: {
-                                    version: toVersion,
-                                },
-                            }, {
-                                upsert: true,
-                            })];
+                                .updateOne({ collectionName: collectionName }, { $set: { version: toVersion } }, { upsert: true })];
                     case 2:
                         updateResult = _a.sent();
                         if (updateResult.upsertedCount === 0 && updateResult.modifiedCount === 0) {
-                            throw dyna_error_1.dynaError({
-                                message: "Cannot update version info collection for collection [" + collectionName + "] v" + toVersion,
-                                data: { collectionName: collectionName, updateResult: updateResult },
+                            throw (0, dyna_error_1.dynaError)({
+                                message: "Cannot update version info collection for collection [".concat(collectionName, "] v").concat(toVersion),
+                                data: {
+                                    collectionName: collectionName,
+                                    updateResult: updateResult,
+                                },
                             });
                         }
                         return [2 /*return*/];
@@ -266,9 +259,7 @@ var UpgradeCollectionsManager = /** @class */ (function () {
                     case 1:
                         versionsCollectionsCollection = _a.sent();
                         return [4 /*yield*/, versionsCollectionsCollection
-                                .deleteOne({
-                                collectionName: collectionName,
-                            })];
+                                .deleteOne({ collectionName: collectionName })];
                     case 2:
                         _a.sent();
                         return [2 /*return*/];
@@ -284,11 +275,7 @@ var UpgradeCollectionsManager = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this.getVersionsCollectionCollection()];
                     case 1:
                         versionsCollection = _a.sent();
-                        return [4 /*yield*/, versionsCollection.updateOne({
-                                collectionName: collectionName,
-                            }, {
-                                $set: { version: version },
-                            })];
+                        return [4 /*yield*/, versionsCollection.updateOne({ collectionName: collectionName }, { $set: { version: version } })];
                     case 2:
                         _a.sent();
                         return [2 /*return*/];
