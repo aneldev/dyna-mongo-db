@@ -8,6 +8,8 @@ import {
   Sort,
 } from "mongodb";
 
+import {DynaJobQueue} from "dyna-job-queue";
+
 import {
   UpgradeCollectionsManager,
   ICollectionsUpgrades,
@@ -38,10 +40,15 @@ export interface IDynaMongoDBExplain {
 export class DynaMongoDB {
   private db: Db | null = null;
   private mongoClient: MongoClient | null = null;
+
+  private queue = new DynaJobQueue();
+
   private readonly upgradeCollectionsManager: UpgradeCollectionsManager;
   private collectionsCache: { [collectionName: string]: Collection<any> } = {};
 
   constructor(private readonly config: IDynaMongoDBConfig) {
+    this.connect = this.queue.jobFactory(this.connect.bind(this));
+
     this.upgradeCollectionsManager = new UpgradeCollectionsManager({
       dmdb: this,
       upgradeCollections: {
