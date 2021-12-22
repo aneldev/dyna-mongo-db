@@ -1,6 +1,6 @@
 {
   "name": "dyna-mongo-db",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "The dyna-mongo-db, upgrade database, collection and dynamic collections",
   "repository": {
     "type": "git",
@@ -18,8 +18,8 @@
     "debug-dev-browser": "webpack-dev-server --config webpack.debug-dev.browser.config.js --devtool eval --progress --open / --host 127.0.0.1 --port 3300",
     "debug-dev-browser-at": "yarn debug-dev-browser --port",
     "debug-dev-build": "rm -rf ./debug-ground/debug-dev-on-nodejs/*; webpack --config webpack.debug-dev.nodejs.config.js --watch",
-    "debug-dev-devtools": "node --inspect --expose-gc --optimize_for_size --max_old_space_size=460 --gc_interval=100 --trace-warnings ./debug-ground/debug-dev-on-nodejs/index.js && yarn run debug-dev-devtools",
-    "debug-dev-devtools-brk": "node --inspect-brk --expose-gc --optimize_for_size --max_old_space_size=460 --gc_interval=100 --trace-warnings ./debug-ground/debug-dev-on-nodejs/index.js && yarn run debug-dev-devtools-brk",
+    "debug-dev-devtools": "node --inspect --expose-gc --optimize_for_size --max_old_space_size=460 --gc_interval=100 --trace-warnings ./debug-ground/debug-dev-on-nodejs/index.js && yarn debug-dev-devtools",
+    "debug-dev-devtools-brk": "node --inspect-brk --expose-gc --optimize_for_size --max_old_space_size=460 --gc_interval=100 --trace-warnings ./debug-ground/debug-dev-on-nodejs/index.js && yarn debug-dev-devtools-brk",
     "debug-dev-run": "node --expose-gc --expose-gc --optimize_for_size --max_old_space_size=460 --gc_interval=100 --trace-warnings ./debug-ground/debug-dev-on-nodejs/index.js",
     "debug-tests": "yarn debug-jest",
     "debug-jest": "node --inspect-brk node_modules/.bin/jest --runInBand",
@@ -38,7 +38,7 @@
     "sync-usages": "node sync-usages.js",
     "sync-usages-watch": "node sync-usages.js --watch",
     "release": "yarn lint && yarn build && yarn test && git add -u && git add -A && git commit --allow-empty -m \"Build changes\" && yarn publish-push",
-    "upgrade-release": "yarn upgrade && yarn run release"
+    "upgrade-release": "yarn upgrade && yarn release"
   },
   "keywords": [
     "mongodb",
