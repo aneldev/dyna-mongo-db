@@ -30,8 +30,6 @@
     "test": "jest --coverage --no-cache --runInBand",
     "lint": "eslint -c .eslintrc.js ./src ./tests",
     "lint-fix": "eslint -c .eslintrc.js --fix ./src ./tests",
-    "lint-which": "which eslint",
-    "lint-version": "eslint --version",
     "test-no-coverage": "jest --no-cache --runInBand",
     "test-watch": "jest --watch --verbose --runInBand",
     "commit": "git add -u && git add -A && git commit --allow-empty -m",
