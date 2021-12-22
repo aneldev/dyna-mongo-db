@@ -60,6 +60,8 @@ export class DynaMongoDB {
       databaseName,
     } = this.config;
 
+    if (this.db) return this.db;
+
     this.mongoClient = await MongoClient.connect(encodeURI(connectionString));
 
     this.db = this.mongoClient.db(databaseName);
