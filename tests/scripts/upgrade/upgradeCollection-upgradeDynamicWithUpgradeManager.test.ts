@@ -55,8 +55,6 @@ describe('Upgrade Collections', () => {
   let upgradeCollectionManager: UpgradeCollectionsManager;
 
   const clearDb = async (): Promise<void> => {
-    const exist = await dmdb.collectionExists(COMPANY_USER_COLLECTION_NAME);
-    if (!exist) return;
     await dmdb.dropCollection(COMPANY_USER_COLLECTION_NAME);
   };
 

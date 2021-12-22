@@ -52,8 +52,6 @@ describe('Upgrade Dynamic Collections', () => {
 
   const clearDb = async (): Promise<void> => {
     await dmdb._debug_changeVersion(COMPANY_USER_COLLECTION_NAME, -1);
-    const exist = await dmdb.collectionExists(COMPANY_USER_COLLECTION_NAME);
-    if (!exist) return;
     await dmdb.dropCollection(COMPANY_USER_COLLECTION_NAME);
   };
 

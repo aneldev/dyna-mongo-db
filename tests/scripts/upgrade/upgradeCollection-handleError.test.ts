@@ -55,8 +55,6 @@ describe('Upgrade Collections', () => {
   const errors: any[] = [];
 
   const clearDb = async (): Promise<void> => {
-    const exist = await dmdb.collectionExists(TEST_COLLECTION_NAME);
-    if (!exist) return;
     await dmdb.dropCollection(TEST_COLLECTION_NAME);
   };
 

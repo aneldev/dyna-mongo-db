@@ -50,8 +50,6 @@ describe('Upgrade Collections', () => {
   let dmdb: DynaMongoDB;
 
   const clearDb = async (): Promise<void> => {
-    const exist = await dmdb.collectionExists(TEST_COLLECTION_NAME);
-    if (!exist) return;
     await dmdb.dropCollection(TEST_COLLECTION_NAME);
   };
 

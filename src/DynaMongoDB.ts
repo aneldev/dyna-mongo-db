@@ -134,16 +134,14 @@ export class DynaMongoDB {
 
   public async dropCollection(collectionName: string): Promise<boolean> {
     const db = await this.getDb();
+
+    const exists = await this.collectionExists(collectionName);
+    if (!exists) return false;
+
     await this.upgradeCollectionsManager.dropCollection(collectionName);
-    try {
-      await db.dropCollection(collectionName);
-      delete this.collectionsCache[collectionName];
-      return true;
-    }
-    catch (e) {
-      if (e.name === 'MongoError' && e.code === 26 && e.message === 'ns not found') return false;
-      throw e;
-    }
+    await db.dropCollection(collectionName);
+    delete this.collectionsCache[collectionName];
+    return true;
   }
 
   public getCollectionVersion(collectionName: string): Promise<number> {
