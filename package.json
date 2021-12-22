@@ -1,6 +1,6 @@
 {
   "name": "dyna-mongo-db",
-  "version": "1.9.2",
+  "version": "2.0.0",
   "description": "The dyna-mongo-db, upgrade database, collection and dynamic collections",
   "repository": {
     "type": "git",
