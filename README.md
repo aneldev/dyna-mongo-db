@@ -121,7 +121,7 @@ What it is doing under the hood:
 ```
 findFirst<TSchema>(args: {
   collectionName: string;
-  filter?: FilterQuery<TSchema>;
+  filter?: Filter<TSchema>;
   sort?: SortOptionObject<TSchema>;
 }): Promise<TSchema | null> {
 ```
@@ -146,7 +146,7 @@ const doc = await collection.find({id: 3}).limit(1).sort({name: 1}).toArray();
 ```
 find<TSchema>(args: {
   collectionName: string;
-  filter?: FilterQuery<TSchema>;
+  filter?: Filter<TSchema>;
   sort?: SortOptionObject<TSchema>;
   limit?: number;
 }): Promise<TSchema[] | null> {
@@ -180,7 +180,7 @@ Has the same parameters as the `find` but return an `explain` object.
 ```
 find<TSchema>(args: {
   collectionName: string;
-  filter?: FilterQuery<TSchema>;
+  filter?: Filter<TSchema>;
   sort?: SortOptionObject<TSchema>;
   limit?: number;
 }): Promise<IDynaMongoDBExplain> {
