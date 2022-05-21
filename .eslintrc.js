@@ -23,6 +23,12 @@ module.exports = {
         "*.tsx",
       ],
       rules: {
+        "no-debugger": [
+          "warn",
+        ],
+
+        "no-template-curly-in-string": "off",
+
         "no-console": [
           "warn",
           {
