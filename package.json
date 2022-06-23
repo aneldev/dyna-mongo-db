@@ -50,7 +50,7 @@
   "author": "Anel dev",
   "license": "MIT",
   "dependencies": {
-    "dyna-error": "^1.1.1",
+    "dyna-error": "^1.4.4",
     "dyna-job-queue": "^5.1.3",
     "dyna-object-scan": "^2.0.0",
     "mongodb": "^4.2.2"
