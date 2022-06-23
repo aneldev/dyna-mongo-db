@@ -3701,10 +3701,10 @@ duplexer@^0.1.2:
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.2.tgz#3abe43aef3835f8ae077d136ddce0f276b0400e6"
   integrity sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==
 
-dyna-error@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/dyna-error/-/dyna-error-1.1.1.tgz#30bd165957ebe98d87404a3ec268883199b4a1a8"
-  integrity sha512-08L8gH4KKkfmE8fdZ8oK53NLxBMzgCPKgslA0I2mhj++2AZBmwP4bOvkBWF204EFHc3WveXssgbEkRi6AlTPww==
+dyna-error@^1.4.4:
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/dyna-error/-/dyna-error-1.4.4.tgz#ad2080d41876884311f4b1fd328c51c1f474c92a"
+  integrity sha512-BiWPn3H93u48+vXS51tAME+gXT9YZfU6wFx+9k/CHYGZsHuth65AI1nRapO91lg3JiBxdiW4KF+/Y55K8SqngA==
 
 dyna-guid@^1.0.10:
   version "1.0.10"

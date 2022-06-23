@@ -95,7 +95,7 @@ describe('Upgrade Collections', () => {
         });
       }
       catch (e) {
-        expect(e.message).toBe('Test error');
+        expect(e.message).toBe('202206230850 DynaMongoDB: FAILED upgrade for collection "test-48823-create-a-collection" to version 20');
         expect(errors).toMatchSnapshot();
         const collectionVersion = await dmdb.getCollectionVersion(TEST_COLLECTION_NAME);
         expect(collectionVersion).toBe(10);
@@ -111,7 +111,7 @@ describe('Upgrade Collections', () => {
         });
       }
       catch (e) {
-        expect(e.message).toBe('Test error');
+        expect(e.message).toBe('202206230850 DynaMongoDB: FAILED upgrade for collection "test-48823-create-a-collection" to version 20');
         expect(errors).toMatchSnapshot();
         const collectionVersion = await dmdb.getCollectionVersion(TEST_COLLECTION_NAME);
         expect(collectionVersion).toBe(10);

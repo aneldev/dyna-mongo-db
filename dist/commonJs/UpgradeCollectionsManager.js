@@ -55,8 +55,10 @@ var UpgradeCollectionsManager = /** @class */ (function () {
     function UpgradeCollectionsManager(config) {
         this.config = config;
         this.dmdb = this.config.dmdb;
+        this.checkUpgradeVersions(config.upgradeCollections);
     }
     UpgradeCollectionsManager.prototype.addCollectionsUpgrades = function (collectionsUpgrades) {
+        this.checkUpgradeVersions(collectionsUpgrades);
         this.config.upgradeCollections = __assign(__assign({}, this.config.upgradeCollections), collectionsUpgrades);
     };
     UpgradeCollectionsManager.prototype.upgradeCollection = function (collectionName) {
@@ -134,7 +136,7 @@ var UpgradeCollectionsManager = /** @class */ (function () {
     };
     UpgradeCollectionsManager.prototype.checkAndUpgradeCollection = function (collectionName, upgrade) {
         return __awaiter(this, void 0, void 0, function () {
-            var db, error_1;
+            var db, error_1, errorMessage;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -158,14 +160,15 @@ var UpgradeCollectionsManager = /** @class */ (function () {
                         return [3 /*break*/, 6];
                     case 5:
                         error_1 = _a.sent();
-                        console.error("DynaMongoDB:  FAILED upgrade for collection \"".concat(collectionName, "\" to version ").concat(upgrade.version), error_1);
-                        if (this.config.onUpgradeError) {
+                        errorMessage = "DynaMongoDB: FAILED upgrade for collection \"".concat(collectionName, "\" to version ").concat(upgrade.version);
+                        console.error(errorMessage, error_1);
+                        if (this.config.onUpgradeError)
                             this.config.onUpgradeError(collectionName, upgrade.version, error_1);
-                        }
-                        else {
-                            console.error("dyna-mongo-db upgrade collection error: collection ".concat(collectionName, " on version: ").concat(upgrade.version), error_1);
-                        }
-                        throw error_1;
+                        throw (0, dyna_error_1.dynaError)({
+                            code: 202206230850,
+                            message: errorMessage,
+                            parentError: error_1,
+                        });
                     case 6: return [2 /*return*/];
                 }
             });
@@ -266,6 +269,31 @@ var UpgradeCollectionsManager = /** @class */ (function () {
                 }
             });
         });
+    };
+    UpgradeCollectionsManager.prototype.checkUpgradeVersions = function (collectionsUpgrades) {
+        var errors = [];
+        Object.keys(collectionsUpgrades)
+            .forEach(function (collectionName) {
+            var collectionUpgrades = collectionsUpgrades[collectionName];
+            collectionUpgrades.upgrades.forEach(function (collectionUpgrade, index, arr) {
+                var prev = arr[index - 1];
+                if (!prev)
+                    return;
+                if (collectionUpgrade.version <= prev.version) {
+                    errors.push("DynaMongoDB: error: 202206230915: Upgrade script for collection [".concat(collectionName, "] \"").concat(collectionUpgrade.title, "\" version (").concat(collectionUpgrade.version, ") has lower or same version with the previous upgrade script!!! Version numbers should be sequential!!!"));
+                }
+            });
+        });
+        if (errors.length) {
+            errors.forEach(function (e) { return console.error(e); });
+            throw (0, dyna_error_1.dynaError)({
+                code: 202206230915,
+                message: errors.length === 1
+                    ? errors[0]
+                    : "DynaMongoDB: error: 202206230915: There are ".concat(errors.length, " Upgrade scripts with wrong versions!!!"),
+                data: { errors: errors },
+            });
+        }
     };
     UpgradeCollectionsManager.prototype._debug_changeVersion = function (collectionName, version) {
         return __awaiter(this, void 0, void 0, function () {

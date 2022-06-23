@@ -49,9 +49,11 @@ export class UpgradeCollectionsManager {
   private readonly dmdb = this.config.dmdb;
 
   constructor(private readonly config: IUpgradeCollectionsManagerConfig) {
+    this.checkUpgradeVersions(config.upgradeCollections);
   }
 
   public addCollectionsUpgrades(collectionsUpgrades: ICollectionsUpgrades): void {
+    this.checkUpgradeVersions(collectionsUpgrades);
     this.config.upgradeCollections = {
       ...this.config.upgradeCollections,
       ...collectionsUpgrades,
@@ -122,14 +124,14 @@ export class UpgradeCollectionsManager {
       console.log(`DynaMongoDB:  SUCCESS upgrade for collection "${collectionName}" to version ${upgrade.version}`);
     }
     catch (error) {
-      console.error(`DynaMongoDB:  FAILED upgrade for collection "${collectionName}" to version ${upgrade.version}`, error);
-      if (this.config.onUpgradeError) {
-        this.config.onUpgradeError(collectionName, upgrade.version, error);
-      }
-      else {
-        console.error(`dyna-mongo-db upgrade collection error: collection ${collectionName} on version: ${upgrade.version}`, error);
-      }
-      throw error;
+      const errorMessage = `DynaMongoDB: FAILED upgrade for collection "${collectionName}" to version ${upgrade.version}`;
+      console.error(errorMessage, error);
+      if (this.config.onUpgradeError) this.config.onUpgradeError(collectionName, upgrade.version, error);
+      throw dynaError({
+        code: 202206230850,
+        message: errorMessage,
+        parentError: error,
+      });
     }
   }
 
@@ -193,6 +195,32 @@ export class UpgradeCollectionsManager {
       .deleteOne(
         {collectionName: collectionName} as IDBCollectionVersionInfo,
       );
+  }
+
+  private checkUpgradeVersions(collectionsUpgrades: ICollectionsUpgrades): void {
+    const errors: string[] = [];
+    Object.keys(collectionsUpgrades)
+      .forEach(collectionName => {
+        const collectionUpgrades = collectionsUpgrades[collectionName];
+        collectionUpgrades.upgrades.forEach((collectionUpgrade, index, arr) => {
+          const prev = arr[index - 1];
+          if (!prev) return;
+          if (collectionUpgrade.version <= prev.version) {
+            errors.push(`DynaMongoDB: error: 202206230915: Upgrade script for collection [${collectionName}] "${collectionUpgrade.title}" version (${collectionUpgrade.version}) has lower or same version with the previous upgrade script!!! Version numbers should be sequential!!!`);
+          }
+        });
+      });
+    if (errors.length) {
+      errors.forEach(e => console.error(e));
+      throw dynaError({
+        code: 202206230915,
+        message:
+          errors.length === 1
+            ? errors[0]
+            : `DynaMongoDB: error: 202206230915: There are ${errors.length} Upgrade scripts with wrong versions!!!`,
+        data: {errors},
+      });
+    }
   }
 
   public async _debug_changeVersion(collectionName: string, version: number): Promise<void> {

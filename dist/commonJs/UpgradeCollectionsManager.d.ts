@@ -38,5 +38,6 @@ export declare class UpgradeCollectionsManager {
     private getVersionsCollectionCollection;
     private bumpConnectionCurrentVersion;
     dropCollection(collectionName: string): Promise<void>;
+    private checkUpgradeVersions;
     _debug_changeVersion(collectionName: string, version: number): Promise<void>;
 }
