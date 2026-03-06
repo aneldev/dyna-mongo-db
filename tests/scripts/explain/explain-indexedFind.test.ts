@@ -108,7 +108,7 @@ describe('Upgrade Dynamic Collections', () => {
           password: 'yo',
         },
       });
-      expect(explain.usedIndexName).toBe('Login name indexer');
+      expect(explain.usedIndexName).toBe('Login name and password indexer');
     });
 
     it('should be able to explain displayName (no index)', async () => {
