@@ -22,7 +22,7 @@ describe('database connection', () => {
 
     await dmdb.getDb().catch(e => error = e);
 
-    expect(error && error.message).toMatch('Invalid connection string');
+    expect(error && error.message).toMatch('Invalid scheme, expected connection');
 
     dmdb.disconnect();
   });
